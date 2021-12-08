@@ -1,5 +1,5 @@
-import React from 'react'
-import { Flex, Box, Button } from '@chakra-ui/react'
+import React from 'react';
+import { Flex, Button } from '@chakra-ui/react';
 
 const Sidebar = () => {
 	return (
@@ -7,7 +7,7 @@ const Sidebar = () => {
 			<Button>Proyectos</Button>
 			<Button>Soporte</Button>
 		</Flex>
-	)
-}
+	);
+};
 
-export default Sidebar
+export default Sidebar;
