@@ -19,9 +19,13 @@ const ListadoProyectos = () => {
 
   return (
     <>
-      {proyectos.map((proyecto) => {
-        return <h2>{proyecto.nombre}</h2>
-      })}
+      {proyectos ? (
+        proyectos.map((proyecto) => {
+          return <h2>{proyecto.nombre}</h2>
+        })
+      ) : (
+        <h2>Todavía no hay proyectos creados.</h2>
+      )}
     </>
   )
 }
