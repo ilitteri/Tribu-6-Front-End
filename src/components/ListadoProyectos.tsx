@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../axios';
+import React, { useState, useEffect } from 'react'
+import axios from '../axios'
 
 interface Proyecto {
-	nombre: number;
+  nombre: number
 }
 
 const ListadoProyectos = () => {
-	const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+  const [proyectos, setProyectos] = useState<Proyecto[]>([])
 
-	useEffect(() => {
-		const getProyectos = async () => {
-			const res = await axios.get('/proyectos');
-			console.log('RES: ', res);
-			setProyectos(res.data.message);
-		};
-		getProyectos();
-	}, []);
+  useEffect(() => {
+    const getProyectos = async () => {
+      const res = await axios.get('/proyectos')
+      console.log('RES: ', res)
+      setProyectos(res.data.message)
+    }
+    getProyectos()
+  }, [])
 
-	return (
-		<>
-			{proyectos.map((proyecto) => {
-				return <h2>{proyecto.nombre}</h2>;
-			})}
-		</>
-	);
-};
+  return (
+    <>
+      {proyectos.map((proyecto) => {
+        return <h2>{proyecto.nombre}</h2>
+      })}
+    </>
+  )
+}
 
-export default ListadoProyectos;
+export default ListadoProyectos
