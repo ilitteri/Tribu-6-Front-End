@@ -1,8 +1,6 @@
-import React from 'react'
-import { Image } from '@chakra-ui/react'
+import React from 'react';
+import { Image } from '@chakra-ui/react';
 
-const LogoPsa = () => {
-  return <Image src="" alt="Logo psa" />
-}
+const LogoPsa = () => <Image src="" alt="Logo psa" />;
 
-export default LogoPsa
+export default LogoPsa;
