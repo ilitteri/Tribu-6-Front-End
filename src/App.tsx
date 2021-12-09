@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ChakraProvider, Box, Grid, theme } from '@chakra-ui/react'
 import { ColorModeSwitcher } from './ColorModeSwitcher'
-import Sidebar from './components/SidebarNav/SidebarNav'
+import Sidebar from './components/SidebarNav'
 import LogoPsa from './components/LogoPsa'
 import ListadoProyectos from './components/ListadoProyectos'
 
