@@ -5,26 +5,29 @@ import {
   useColorModeValue,
   Text,
   BoxProps,
-} from '@chakra-ui/react';
-import { GoProject } from 'react-icons/go';
-import { AiFillFire } from 'react-icons/ai';
-import { IconType } from 'react-icons';
+  Grid,
+} from '@chakra-ui/react'
+import { GoProject } from 'react-icons/go'
+import { AiFillFire } from 'react-icons/ai'
+import { IconType } from 'react-icons'
 
-import NavItem from './NavItem';
+import NavItem from './NavItem'
+import LogoPsa from './LogoPsa'
+import ColorModeSwitcher from '../../../ColorModeSwitcher'
 
 interface LinkItemProps {
-  name: string;
-  icon: IconType;
-  href?: string;
+  name: string
+  icon: IconType
+  href?: string
 }
 
 const linkItems: LinkItemProps[] = [
-  { name: 'Proyectos', icon: GoProject, href: '/projects' },
-  { name: 'Soporte', icon: AiFillFire },
-];
+  { name: 'Proyectos', icon: GoProject, href: '/proyectos' },
+  { name: 'Soporte', icon: AiFillFire, href: '/soporte' },
+]
 
 interface SidebarProps extends BoxProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => (
@@ -39,7 +42,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => (
   >
     <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
       <Text fontSize="2xl" fontWeight="bold">
-        PSA
+        <LogoPsa />
       </Text>
       <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
     </Flex>
@@ -48,7 +51,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => (
         {link.name}
       </NavItem>
     ))}
+    <Grid p={3}>
+      <ColorModeSwitcher />
+    </Grid>
   </Box>
-);
+)
 
-export default SidebarContent;
+export default SidebarContent

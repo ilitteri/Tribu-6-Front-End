@@ -6,6 +6,7 @@ import {
   FlexProps,
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
+import LogoPsa from './LogoPsa';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -30,8 +31,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => (
       icon={<FiMenu />}
     />
 
-    <Text fontSize="2xl" ml="8" fontWeight="bold">
-      PSA
+    <Text fontSize="2xl" p="8" ml="8" fontWeight="bold">
+			<LogoPsa />
     </Text>
   </Flex>
 );
