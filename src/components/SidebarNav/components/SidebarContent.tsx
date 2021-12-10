@@ -3,7 +3,6 @@ import {
   CloseButton,
   Flex,
   useColorModeValue,
-  Text,
   BoxProps,
   Grid,
 } from '@chakra-ui/react'
@@ -41,9 +40,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => (
     {...rest}
   >
     <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-      <Text fontSize="2xl" fontWeight="bold">
-        <LogoPsa />
-      </Text>
+      <LogoPsa />
       <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
     </Flex>
     {linkItems.map((link) => (
