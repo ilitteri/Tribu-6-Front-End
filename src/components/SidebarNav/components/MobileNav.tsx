@@ -3,7 +3,6 @@ import {
   Flex,
   useColorModeValue,
   FlexProps,
-  Box,
 } from '@chakra-ui/react'
 import { FiMenu } from 'react-icons/fi'
 import LogoPsa from './LogoPsa'
