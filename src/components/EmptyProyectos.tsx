@@ -11,6 +11,7 @@ const EmptyProyectos = () => {
       textAlign="center"
       mt="150px"
       p="5px"
+      w="100%"
     >
       <Heading size="lg" mb="20px">
         Todavía no hay proyectos creados. ¡Creá uno!

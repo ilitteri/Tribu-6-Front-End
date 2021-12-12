@@ -1,4 +1,13 @@
-import { Table, Thead, Tr, Th, Tbody, Td, Spinner } from '@chakra-ui/react'
+import {
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Spinner,
+  Flex,
+} from '@chakra-ui/react'
 
 import EmptyProyectos from './EmptyProyectos'
 
@@ -17,7 +26,11 @@ interface Props {
 
 const ListadoProyectos = ({ proyectos, loading }: Props) => {
   if (loading) {
-    return <Spinner />
+    return (
+      <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
+        <Spinner />
+      </Flex>
+    )
   }
 
   return proyectos && proyectos.length === 0 ? (

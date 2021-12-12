@@ -26,12 +26,7 @@ const Proyectos = () => {
         <Heading>Proyectos</Heading>
         {proyectos && proyectos.length > 0 && <NuevoProyectoButton />}
       </Flex>
-      <Flex
-        overflow="auto"
-        mt="20px"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Flex overflow="auto" mt="20px" alignItems="center">
         <ListadoProyectos proyectos={proyectos} loading={loading} />
       </Flex>
     </>
