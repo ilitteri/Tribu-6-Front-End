@@ -1,4 +1,4 @@
-import { Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+import { Table, Thead, Tr, Th, Tbody, Td, Spinner } from '@chakra-ui/react'
 
 import EmptyProyectos from './EmptyProyectos'
 
@@ -10,7 +10,16 @@ interface Proyecto {
   liderProyecto: string
 }
 
-const ListadoProyectos = ({ proyectos }: { proyectos: Proyecto[] }) => {
+interface Props {
+  proyectos: Proyecto[]
+  loading: boolean
+}
+
+const ListadoProyectos = ({ proyectos, loading }: Props) => {
+  if (loading) {
+    return <Spinner />
+  }
+
   return proyectos && proyectos.length === 0 ? (
     <EmptyProyectos />
   ) : (

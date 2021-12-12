@@ -8,11 +8,14 @@ import NuevoProyectoButton from '../components/NuevoProyectoButton'
 
 const Proyectos = () => {
   const [proyectos, setProyectos] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const getProyectos = async () => {
+      setLoading(true)
       const res = await axios.get('/projects')
       setProyectos(res.data.message)
+      setLoading(false)
     }
     getProyectos()
   }, [])
@@ -29,7 +32,7 @@ const Proyectos = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <ListadoProyectos proyectos={proyectos} />
+        <ListadoProyectos proyectos={proyectos} loading={loading} />
       </Flex>
     </>
   )
