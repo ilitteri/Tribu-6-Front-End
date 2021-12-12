@@ -12,7 +12,7 @@ import { IconType } from 'react-icons'
 
 import NavItem from './NavItem'
 import LogoPsa from './LogoPsa'
-import ColorModeSwitcher from '../../../ColorModeSwitcher'
+import ColorModeSwitcher from '../../ColorModeSwitcher'
 
 interface LinkItemProps {
   name: string
