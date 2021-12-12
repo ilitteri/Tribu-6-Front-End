@@ -1,25 +1,16 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
-import Sidebar from "./components/Sidebar"
-import LogoPsa from "./components/LogoPsa"
-import ListadoProyectos from "./components/ListadoProyectos"
+import * as React from 'react'
+import { ChakraProvider, Box, theme } from '@chakra-ui/react'
+import Sidebar from './components/SidebarNav'
+import ListadoProyectos from './components/ListadoProyectos'
 
-export const App = () => (
+const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <LogoPsa />
-      </Grid>
-      <Sidebar />
-      <ListadoProyectos />
-    </Box>
+    <Sidebar>
+      <Box textAlign="center" fontSize="xl">
+        <ListadoProyectos />
+      </Box>
+    </Sidebar>
   </ChakraProvider>
 )
+
+export default App
