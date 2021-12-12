@@ -1,34 +1,42 @@
-import { useState, useEffect } from 'react';
-import axios from '../axios';
+import { Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+
+import EmptyProyectos from './EmptyProyectos'
 
 interface Proyecto {
-  id: number;
-  nombre: string;
+  id: number
+  nombre: string
+  tipo: string
+  estado: string
+  liderProyecto: string
 }
 
-const ListadoProyectos = () => {
-  const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+const ListadoProyectos = ({ proyectos }: { proyectos: Proyecto[] }) => {
+  return proyectos && proyectos.length === 0 ? (
+    <EmptyProyectos />
+  ) : (
+    <Table variant="striped" colorScheme="teal">
+      <Thead>
+        <Tr>
+          <Th>Nombre</Th>
+          <Th>Tipo</Th>
+          <Th>Estado</Th>
+          <Th>Líder</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {proyectos.map((proyecto) => {
+          return (
+            <Tr>
+              <Td>{proyecto.nombre}</Td>
+              <Td>{proyecto.tipo}</Td>
+              <Td>{proyecto.estado}</Td>
+              <Td>{proyecto.liderProyecto}</Td>
+            </Tr>
+          )
+        })}
+      </Tbody>
+    </Table>
+  )
+}
 
-  useEffect(() => {
-    const getProyectos = async () => {
-      const res = await axios.get('/projects');
-      console.log('RES: ', res);
-      setProyectos(res.data.message);
-    };
-    getProyectos();
-  }, []);
-
-  return (
-    <>
-      {proyectos ? (
-        proyectos.map((proyecto) => (
-          <h2 key={proyecto.id}>{proyecto.nombre}</h2>
-        ))
-      ) : (
-        <h2>Todavía no hay proyectos creados.</h2>
-      )}
-    </>
-  );
-};
-
-export default ListadoProyectos;
+export default ListadoProyectos
