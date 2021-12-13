@@ -1,7 +1,14 @@
 import axios from 'axios';
 
-const instance = axios.create({
+const proyectosAPI = axios.create({
   baseURL: 'https://squad10-aninfo-backend.herokuapp.com',
 });
 
-export default instance;
+const soporteAPI = axios.create({
+  baseURL: 'http://soporte-squad6.herokuapp.com',
+});
+
+export {
+  proyectosAPI,
+  soporteAPI
+}
