@@ -1,16 +1,23 @@
-import * as React from 'react'
-import { ChakraProvider, Box, theme } from '@chakra-ui/react'
-import Sidebar from './components/SidebarNav'
-import ListadoProyectos from './components/ListadoProyectos'
+import { Routes, Route } from 'react-router-dom'
+import { ChakraProvider, theme } from '@chakra-ui/react'
 
-const App = () => (
-  <ChakraProvider theme={theme}>
-    <Sidebar>
-      <Box textAlign="center" fontSize="xl">
-        <ListadoProyectos />
-      </Box>
-    </Sidebar>
-  </ChakraProvider>
-)
+import Sidebar from './components/SidebarNav'
+
+import Proyectos from './pages/Proyectos'
+import Soporte from './pages/Soporte'
+
+const App = () => {
+  return (
+    <ChakraProvider theme={theme}>
+      <Sidebar>
+        <Routes>
+          <Route path="/" element={<Proyectos />} />
+          <Route path="/proyectos" element={<Proyectos />} />
+          <Route path="/soporte" element={<Soporte />} />
+        </Routes>
+      </Sidebar>
+    </ChakraProvider>
+  )
+}
 
 export default App
