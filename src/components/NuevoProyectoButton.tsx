@@ -7,7 +7,7 @@ const NuevoProyectoButton = () => {
 
   return (
     <Button
-      onClick={() => navigate('nuevo')}
+      onClick={() => navigate('/proyectos/nuevo')}
       leftIcon={<GoPlus />}
       colorScheme="teal"
       variant="solid"
