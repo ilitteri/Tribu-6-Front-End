@@ -1,7 +1,11 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { soporteAPI } from '../axios'
+import CreacionTicketForm from '../components/CreacionTicketForm'
 
+
+
+/*
 const NuevoTicket = () => {
     const [loading, setLoading] = useState(false)
     const [productos, setProductos] = useState<any[]>([])
@@ -32,13 +36,26 @@ const NuevoTicket = () => {
           <Flex alignItems="center" justifyContent="space-between">
             <Heading>Soporte</Heading>
           </Flex>
-          {/* <NuevoTicketForm
+          { <NuevoTicketForm
             productos={productos}
             empleados={empleados}
             clientes={clientes}
-            loading={loading}></NuevoTicketForm> */}
+            loading={loading}></NuevoTicketForm> }
         </>
       )
+}  
+
+*/
+
+const NuevoTicket = () => {
+  return (
+    <>
+      <Heading>Nuevo Ticket</Heading>
+      <CreacionTicketForm />
+    </>
+  )
 }
+
+
 
 export default NuevoTicket
