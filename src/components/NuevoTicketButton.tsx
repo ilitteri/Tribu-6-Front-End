@@ -1,11 +1,20 @@
 import { Button } from '@chakra-ui/react'
 import { GoPlus } from 'react-icons/go'
+import { useNavigate } from 'react-router-dom'
+
+
 
 const NuevoTicketButton = () => {
+  const navigate = useNavigate()
+
   return (
-    // Agregar redirect a nuevoTicket
-    <Button leftIcon={<GoPlus />} colorScheme="teal" variant="solid">
-      Nuevo Ticket
+    <Button
+      onClick={() => navigate('nuevo')}
+      leftIcon={<GoPlus />}
+      colorScheme="teal"
+      variant="solid"
+    >
+      Crear Ticket
     </Button>
   )
 }
