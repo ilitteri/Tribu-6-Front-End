@@ -46,16 +46,14 @@ const ListadoProyectos = ({ proyectos, loading }: Props) => {
         </Tr>
       </Thead>
       <Tbody>
-        {proyectos.map((proyecto) => {
-          return (
-            <Tr>
-              <Td>{proyecto.nombre}</Td>
-              <Td>{proyecto.tipo}</Td>
-              <Td>{proyecto.estado}</Td>
-              <Td>{proyecto.liderProyecto}</Td>
-            </Tr>
-          )
-        })}
+        {proyectos.map((proyecto) => (
+          <Tr key={proyecto.id}>
+            <Td>{proyecto.nombre}</Td>
+            <Td>{proyecto.tipo}</Td>
+            <Td>{proyecto.estado}</Td>
+            <Td>{proyecto.liderProyecto}</Td>
+          </Tr>
+        ))}
       </Tbody>
     </Table>
   )
