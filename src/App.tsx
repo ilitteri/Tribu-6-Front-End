@@ -10,6 +10,7 @@ import Soporte from './pages/Soporte'
 import CreacionProyectos from './pages/CreacionProyectos'
 import Inicio from './pages/Inicio'
 import VisualizacionTickets from './components/VisualizacionTickets'
+import NuevoTicket from './components/NuevoTicket'
 
 const App = () => {
   return (
@@ -22,10 +23,8 @@ const App = () => {
           <Route path="/proyecto/:idProyecto/:idTarea" element={<Tarea />} />
           <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
           <Route path="/soporte" element={<Soporte />} />
-          <Route
-            path="/soporte/tickets/:idVersion"
-            element={<VisualizacionTickets />}
-          />
+          <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTickets />}/>
+          <Route path="/soporte/nuevo" element={<NuevoTicket />} />
         </Routes>
       </Sidebar>
     </ChakraProvider>
