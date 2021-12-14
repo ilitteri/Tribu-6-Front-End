@@ -5,7 +5,7 @@ const proyectosAPI = axios.create({
 });
 
 const soporteAPI = axios.create({
-  baseURL: 'http://soporte-squad6.herokuapp.com',
+  baseURL: 'https://soporte-squad6.herokuapp.com',
 });
 
 export {
