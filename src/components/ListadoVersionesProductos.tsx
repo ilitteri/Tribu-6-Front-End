@@ -42,7 +42,9 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
 
     return productos && productos.length === 0 ? (
         <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
-            {/* EmptyComponent */}
+            <Heading as='h2' size='lg' mt="5vh">
+                No hay productos en el sistema.
+            </Heading>
         </Flex>
     ) : (
         <Flex width="100%" direction="column">
@@ -50,6 +52,13 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
             return (
             <Flex direction="column" mt="4vh">
                 <Heading as='h2' size='lg'>{producto.nombre}</Heading>
+                { producto.versionesProducto && producto.versionesProducto.length === 0 ? (
+                <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
+                    <Heading as='h3' size='md' mt="5vh">
+                        No hay versiones en el sistema para este producto.
+                    </Heading>
+                </Flex>
+            ) : (
                 <Table mt="2vh" variant="striped" colorScheme="teal">
                     <Thead>
                         <Tr>
@@ -68,6 +77,7 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
                         })}
                     </Tbody>
                 </Table>
+                )}
             </Flex>
             )
         })}
