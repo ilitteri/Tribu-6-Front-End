@@ -28,7 +28,7 @@ const VisualizacionTickets = () => {
           }
         }
         getData()
-      })
+      }, [params.idVersion])
 
       return <>
         <Flex alignItems="center" justifyContent="space-between">
