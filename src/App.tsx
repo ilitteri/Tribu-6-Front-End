@@ -5,7 +5,11 @@ import Sidebar from './components/SidebarNav'
 
 import Proyectos from './pages/Proyectos'
 import Soporte from './pages/Soporte'
+<<<<<<< HEAD
 import Inicio from './pages/Inicio'
+=======
+import VisualizacionTickets from './components/VisualizacionTickets'
+>>>>>>> Agregada pantalla de visualizacion de tickets para version de producto
 
 const App = () => {
   return (
@@ -14,7 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/proyectos" element={<Proyectos />} />
-          <Route path="/soporte" element={<Soporte />} />
+          <Route path="/soporte" element={<Soporte />}/>
+          <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTickets />} />
         </Routes>
       </Sidebar>
     </ChakraProvider>
