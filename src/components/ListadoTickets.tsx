@@ -49,11 +49,13 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         var diasTotales = diasPorSeveridad[severidad];
         if(!diasTotales) return "SIN VENCIMIENTO"; // definir mensaje
 
-        var fechaCreacion = new Date(fechaCreacion)
-        var fechaVencimiento = new Date(fechaCreacion)
-        fechaVencimiento.setDate(fechaCreacion.getDate() + diasTotales);
         var dia = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-        var diasParaVencimiento = Math.round(Math.abs((fechaCreacion.getTime() - fechaVencimiento.getTime()) / (dia)));
+        var hoy = new Date();
+        var creacion = new Date(fechaCreacion);
+
+        var diasTranscurridos = Math.floor((Math.abs(creacion.getTime() - hoy.getTime())) / (dia));
+        var diasParaVencimiento = diasTotales - diasTranscurridos;
+
         return diasParaVencimiento > 0 ? diasParaVencimiento.toString() : "ATRASADA" //definir mensaje
     }
 
