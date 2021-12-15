@@ -102,6 +102,7 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                 <Td w="15%">{getNombreEmpleado(ticket.legajoEmpleado)}</Td>
                 <Td w="15%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
                 <Td w="20%">ACCIONES</Td>
+                {/* definir acciones */}
               </Tr>
             )
           })}

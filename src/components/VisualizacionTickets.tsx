@@ -21,7 +21,6 @@ const VisualizacionTickets = () => {
             const empleados = await soporteAPI.get('/empleados');
             setTickets(tickets.data)
             setEmpleados(empleados.data)
-            console.log(empleados.data)
             setLoading(false)
           } catch {
             //handlear
