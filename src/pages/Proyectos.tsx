@@ -1,7 +1,7 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 
-import axios from '../axios'
+import { proyectosAPI } from '../axios'
 
 import ListadoProyectos from '../components/ListadoProyectos'
 import NuevoProyectoButton from '../components/NuevoProyectoButton'
@@ -13,7 +13,7 @@ const Proyectos = () => {
   useEffect(() => {
     const getProyectos = async () => {
       setLoading(true)
-      const res = await axios.get('/projects')
+      const res = await proyectosAPI.get('/projects')
       setProyectos(res.data.message)
       setLoading(false)
     }
