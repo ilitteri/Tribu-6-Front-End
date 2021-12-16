@@ -14,24 +14,82 @@ import {
   useToast,
   FormErrorMessage,
 } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import axios from '../axios'
+import { proyectosAPI } from '../axios'
 
-// TODO: agregar validaciones
+interface Recurso {
+  legajo: number
+  Nombre: string
+  Apellido: string
+}
+
+const mockRecursos: Recurso[] = [
+  {
+    legajo: 1,
+    Nombre: 'Mario',
+    Apellido: 'Mendoza',
+  },
+  {
+    legajo: 2,
+    Nombre: 'Maria',
+    Apellido: 'Perez',
+  },
+  {
+    legajo: 3,
+    Nombre: 'Patricia',
+    Apellido: 'Gaona',
+  },
+]
+
+const opcionesTipoProyecto = [
+  {
+    value: 'Desarrollo',
+    nombre: 'Desarrollo',
+  },
+  {
+    value: 'Implementacion',
+    nombre: 'Implementación',
+  },
+]
+
+const validateFechas = ({ fechaInicio, fechaFin }: any) => {
+  if (!fechaInicio || !fechaFin) {
+    return true
+  }
+
+  const fInicio = new Date(fechaInicio).getTime()
+  const fFin = new Date(fechaFin).getTime()
+
+  return fInicio <= fFin
+}
+
 const CreacionProyectoForm = () => {
+  const [recursos, setRecursos] = useState<Recurso[]>([])
   const navigate = useNavigate()
   const toast = useToast()
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm()
+
+  useEffect(() => {
+    const fetchRecursos = async () => {
+      // TODO: Descomentar al resolver problema de cors
+      // const res = await recursosAPI.get('/recursos')
+      // setRecursos(res.data)
+      setRecursos(mockRecursos)
+    }
+    fetchRecursos()
+  }, [])
 
   const onSubmit = async (proyecto: any) => {
     try {
-      await axios.post('/projects', proyecto)
+      await proyectosAPI.post('/projects', proyecto)
       toast({
         title: '¡Se creó el proyecto! 🥳',
         status: 'success',
@@ -76,9 +134,11 @@ const CreacionProyectoForm = () => {
                 placeholder="Seleccionar tipo"
                 {...register('tipo')}
               >
-                {/* TODO: revisar porque no está tomando la tilde */}
-                <option>Desarrollo</option>
-                <option>Implementación</option>
+                {opcionesTipoProyecto.map(({ value, nombre }) => (
+                  <option key={value} value={value}>
+                    {nombre}
+                  </option>
+                ))}
               </Select>
               <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
             </FormControl>
@@ -88,11 +148,10 @@ const CreacionProyectoForm = () => {
               <Input
                 id="fecha-inicio"
                 type="date"
-                {...register('fechaInicio')}
+                {...register('fechaInicio', {
+                  validate: () => validateFechas(getValues()),
+                })}
               />
-              <FormErrorMessage>
-                {errors?.fechaInicio?.message}
-              </FormErrorMessage>
             </FormControl>
           </HStack>
 
@@ -102,14 +161,17 @@ const CreacionProyectoForm = () => {
               isInvalid={errors?.liderProyecto}
             >
               <FormLabel>Líder</FormLabel>
-              {/* TODO: obtener las personas de la api de recursos */}
               <Select
                 id="liderProyecto"
                 placeholder="Seleccionar líder"
                 {...register('liderProyecto')}
               >
-                <option>Fulano</option>
-                <option>Pepito</option>
+                {recursos?.map(({ Nombre, Apellido, legajo }) => (
+                  <option
+                    key={`${legajo}-${Nombre}-${Apellido}`}
+                    value={`${Nombre} ${Apellido}`}
+                  >{`${Nombre} ${Apellido} (${legajo})`}</option>
+                ))}
               </Select>
               <FormErrorMessage>
                 {errors?.liderProyecto?.message}
@@ -118,8 +180,18 @@ const CreacionProyectoForm = () => {
 
             <FormControl htmlFor="fecha-fin" isInvalid={errors?.fechaFin}>
               <FormLabel>Fecha de Fin</FormLabel>
-              <Input id="fecha-fin" type="date" {...register('fechaFin')} />
-              <FormErrorMessage>{errors?.fechaFin?.message}</FormErrorMessage>
+              <Input
+                id="fecha-fin"
+                type="date"
+                {...register('fechaFin', {
+                  validate: () => validateFechas(getValues()),
+                })}
+              />
+              {errors?.fechaFin?.type === 'validate' && (
+                <FormErrorMessage>
+                  La fecha de fin debe ser posterior a la fecha de inicio
+                </FormErrorMessage>
+              )}
             </FormControl>
           </HStack>
 
