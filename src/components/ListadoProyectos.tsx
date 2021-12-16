@@ -7,12 +7,13 @@ import {
   Td,
   Spinner,
   Flex,
+  Link,
 } from '@chakra-ui/react'
 
 import EmptyProyectos from './EmptyProyectos'
 
 interface Proyecto {
-  id: number
+  _id: number
   nombre: string
   tipo: string
   estado: string
@@ -47,9 +48,10 @@ const ListadoProyectos = ({ proyectos, loading }: Props) => {
       </Thead>
       <Tbody>
         {proyectos.map((proyecto) => {
+          const ref = `/proyecto/${proyecto._id}`;
           return (
             <Tr>
-              <Td>{proyecto.nombre}</Td>
+              <Td><Link href={ref}>{proyecto.nombre}</Link></Td>
               <Td>{proyecto.tipo}</Td>
               <Td>{proyecto.estado}</Td>
               <Td>{proyecto.liderProyecto}</Td>
