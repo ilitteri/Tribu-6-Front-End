@@ -7,9 +7,8 @@ import {
   Td,
   Spinner,
   Flex,
-  Link,
 } from '@chakra-ui/react'
-
+import { useNavigate } from 'react-router-dom'
 import EmptyProyectos from './EmptyProyectos'
 
 interface Proyecto {
@@ -26,6 +25,7 @@ interface Props {
 }
 
 const ListadoProyectos = ({ proyectos, loading }: Props) => {
+  const navigate = useNavigate()
   if (loading) {
     return (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
@@ -50,8 +50,8 @@ const ListadoProyectos = ({ proyectos, loading }: Props) => {
         {proyectos.map((proyecto) => {
           const ref = `/proyecto/${proyecto._id}`;
           return (
-            <Tr>
-              <Td><Link href={ref}>{proyecto.nombre}</Link></Td>
+            <Tr cursor="pointer" onClick={() => navigate(ref)}>
+              <Td>{proyecto.nombre}</Td>
               <Td>{proyecto.tipo}</Td>
               <Td>{proyecto.estado}</Td>
               <Td>{proyecto.liderProyecto}</Td>

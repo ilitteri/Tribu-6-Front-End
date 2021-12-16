@@ -7,7 +7,6 @@ import {
     Td,
     Spinner,
     Flex,
-    calc,
   } from '@chakra-ui/react'
   
   import EmptyTareas from './EmptyTareas'

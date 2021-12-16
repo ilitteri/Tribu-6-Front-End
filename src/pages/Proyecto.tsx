@@ -7,13 +7,13 @@ import { proyectosAPI } from '../axios'
 import ListadoTareas from '../components/ListadoTareas'
 import NuevaTareaButton from '../components/NuevaTareaButton'
 import PresentacionProyecto from '../components/PresentacionProyecto'
-import Scroll from '../components/Scroll'
 
 const Proyecto = () => {
   const [proyecto, setProyecto] = useState<any[]>([])
   const [tareas, setTareas] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const { id } = useParams();
+
   useEffect(() => {
     const getProyecto = async () => {
       setLoading(true)
@@ -30,7 +30,7 @@ const Proyecto = () => {
     }
     getProyecto()
     getTareas()
-  }, [])
+  }, [id])
   
   return(
     <>
