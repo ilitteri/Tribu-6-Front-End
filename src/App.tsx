@@ -5,6 +5,7 @@ import Sidebar from './components/SidebarNav'
 
 import Proyectos from './pages/Proyectos'
 import Soporte from './pages/Soporte'
+import Proyecto from './pages/Proyecto'
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
           <Route path="/" element={<Proyectos />} />
           <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/soporte" element={<Soporte />} />
+          <Route path="/proyecto/:id" element={<Proyecto  />} />
         </Routes>
       </Sidebar>
     </ChakraProvider>
