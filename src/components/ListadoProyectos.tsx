@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react'
 import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 
 import { proyectosAPI } from '../axios'
 import EmptyProyectos from './EmptyProyectos'
@@ -84,14 +85,15 @@ const AdvertenciaModal = ({ isOpen, onClose, onDelete, proyecto }: any) => {
   )
 }
 
-const handleEdit = () => {
-  //
-}
-
 const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const [proyectoABorrar, setProyectoABorrar] = useState<any>()
+  const navigate = useNavigate()
+
+  const handleEdit = (proyectoId: any) => {
+    navigate(`/proyectos/${proyectoId}/editar`)
+  }
 
   const handleDelete = async (proyectoId: any) => {
     try {
@@ -159,7 +161,7 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
                       aria-label="Editar"
                       variant="outline"
                       icon={<FaEdit />}
-                      onClick={handleEdit}
+                      onClick={() => handleEdit(proyecto._id)}
                     />
                   </Flex>
                 </Td>
