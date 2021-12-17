@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { soporteAPI } from '../axios'
 import ListadoVersionesProductos from '../components/ListadoVersionesProductos'
 
-
 const Soporte = () => {
   const [productos, setProductos] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -29,7 +28,7 @@ const Soporte = () => {
         <Heading>Soporte</Heading>
         {productos && productos.length > 0}
       </Flex>
-      <Heading as='h3' size='md'>Productos</Heading>
+      <Heading as='h3' size='lg' mt="1em">Productos</Heading>
       <Flex overflow="auto">
         <ListadoVersionesProductos productos={productos} loading={loading} />
       </Flex>

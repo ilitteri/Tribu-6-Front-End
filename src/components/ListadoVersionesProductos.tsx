@@ -9,7 +9,7 @@ import {
     Flex,
     Heading,
 } from '@chakra-ui/react'
-
+import { useNavigate } from 'react-router-dom'
 interface Producto {
     id: number,
     nombre: string,
@@ -32,6 +32,9 @@ function parseDate(fechaLanzamiento: Date): string {
 }
 
 const ListadoVersionesProductos = ({ productos, loading }: Props) => {
+
+    const navigate = useNavigate()
+
     if (loading) {
         return (
             <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
@@ -69,7 +72,8 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
                     <Tbody text-align="center">
                         {producto.versionesProducto.map((version) => {
                             return (
-                            <Tr cursor="pointer" onClick={() => console.log("Redirigir?")}>
+                            <Tr
+                            cursor="pointer" onClick={() => navigate('tickets/' + version.id, { state: {producto: producto.nombre, version: version.versionProducto} } )}>
                                 <Td width="50%">{version.versionProducto}</Td>
                                 <Td>{parseDate(version.fechaLanzamiento)}</Td>
                             </Tr>
