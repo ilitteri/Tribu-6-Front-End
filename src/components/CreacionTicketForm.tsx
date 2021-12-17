@@ -14,12 +14,17 @@ import {
     useToast,
     FormErrorMessage,
   } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
   import { useForm } from 'react-hook-form'
   import { useNavigate } from 'react-router-dom'
   
   import { soporteAPI } from '../axios'
   
+
+  //productos: any,empleados: any,clientes: any
   // TODO: agregar validaciones
+
+
   const CreacionTicketForm = () => {
     const navigate = useNavigate()
     const toast = useToast()
@@ -46,6 +51,29 @@ import {
         })
       }
     }
+
+    const [loading, setLoading] = useState(false)
+    const [productos, setProductos] = useState<any[]>([])
+    const [empleados, setEmpleados] = useState<any[]>([])
+    const [clientes, setClientes] = useState<any[]>([])
+    useEffect(() => {
+      const getData = async () => {
+        setLoading(true)
+        try {
+          const productos = await soporteAPI.get('/productos')
+          const empleados = await soporteAPI.get('/empleados')
+          const clientes = await soporteAPI.get('/clientes')
+          setProductos(productos.data)
+          setEmpleados(empleados.data)
+          setClientes(clientes.data)
+          setLoading(false)
+        } catch {
+          //handlear
+          setLoading(false)
+        }
+      }
+    getData()
+    }, [])
   
     return (
       <Box
@@ -81,6 +109,7 @@ import {
             </FormControl>
 
             <HStack>
+
               <FormControl
                 htmlFor="Productos" isRequired
                 isInvalid={errors?.Productos}
@@ -93,19 +122,22 @@ import {
                   {...register('Productos', {
                     required: 'Debe seleccionar un producto',
                 })}
-
+            
                 >
-                  <option>Fulano</option>
-                  <option>Pepito</option>
+                  {productos.map((productos) => {
+                    //return <p>productos.nombre</p>
+                    return <option>{productos.nombre}</option>
+                  })}
+
                 </Select>
                 <FormErrorMessage>
-                  {errors?.liderProyecto?.message}
+                  {errors?.Productos?.message}
                 </FormErrorMessage>
               </FormControl>
   
               <FormControl
                 htmlFor="Version" isRequired
-                isInvalid={errors?.liderProyecto}
+                isInvalid={errors?.Version}
               >
                 <FormLabel>Version</FormLabel>
                 {/* TODO: obtener las versiones de la api */}
@@ -128,7 +160,7 @@ import {
             <HStack>
               <FormControl
                 htmlFor="Cliente" isRequired
-                isInvalid={errors?.liderProyecto}
+                isInvalid={errors?.Cliente}
               >
                 <FormLabel>Cliente</FormLabel>
                 {/* TODO: obtener los clientes de la api */}
@@ -139,8 +171,10 @@ import {
                     required: 'Debe seleccionar un cliente',
                 })}
                 >
-                  <option>C1</option>
-                  <option>C2</option>
+                  {clientes.map((clientes) => {
+                    //return <p>productos.nombre</p>
+                    return <option value = {clientes.id}>{clientes["razon social"]}</option>
+                  })}
                 </Select>
                 <FormErrorMessage>
                   {errors?.Cliente?.message}
@@ -148,8 +182,8 @@ import {
               </FormControl>
   
               <FormControl
-                htmlFor="Persona" isRequired
-                isInvalid={errors?.liderProyecto}
+                htmlFor="Persona" 
+                isInvalid={errors?.Persona}
               >
                 <FormLabel>Persona asignada</FormLabel>
                 {/* TODO: obtener las personas de la api de recursos */}
@@ -158,8 +192,9 @@ import {
                   placeholder="Seleccionar la persona asignada al ticket"
                   {...register('persona')}
                 >
-                  <option>V1</option>
-                  <option>V2</option>
+                  {empleados.map((empleados) => {
+                    return <option value = {empleados.id}>{empleados[empleados.Nombre "+" empleados.Apellido"]}</option>
+                  })}
                 </Select>
                 <FormErrorMessage>
                   {errors?.persona?.message}
@@ -178,8 +213,8 @@ import {
                     required: 'Debe seleccionar un tipo de ticket',
                 })}
                 >
-                  <option>Consulta</option>
-                  <option>Incidencia</option>
+                  <option value ={"CONSULTA"} >Consulta</option>
+                  <option  value = {"INCIDENCIA"}>Incidencia</option>
                 </Select>
                 <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
               </FormControl>
