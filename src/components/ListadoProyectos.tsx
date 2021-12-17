@@ -7,17 +7,16 @@ import {
   Td,
   Spinner,
   Flex,
-  IconButton,
   useToast,
   useDisclosure,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { proyectosAPI } from '../axios'
 import EmptyProyectos from './EmptyProyectos'
 import AdvertenciaModal from './AdvertenciaModal'
+import ActionButtons from './ActionButtons'
 
 interface Proyecto {
   _id: number
@@ -85,39 +84,28 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
           </Tr>
         </Thead>
         <Tbody>
-          {proyectos.map((proyecto) => {
-            return (
-              <Tr>
-                <Td>{proyecto.nombre}</Td>
-                <Td>{proyecto.tipo}</Td>
-                <Td>{proyecto.estado}</Td>
-                <Td>{proyecto.liderProyecto}</Td>
-                <Td w="100px">
-                  <Flex justifyContent="center" alignItems="center">
-                    <IconButton
-                      aria-label="Borrar"
-                      variant="outline"
-                      icon={<FaTrashAlt />}
-                      color="red.500"
-                      mr="10px"
-                      onClick={() => {
-                        setProyectoABorrar(proyecto)
-                        onOpen()
-                      }}
-                    />
-                    <IconButton
-                      aria-label="Editar"
-                      variant="outline"
-                      icon={<FaEdit />}
-                      onClick={() => handleEdit(proyecto._id)}
-                    />
-                  </Flex>
-                </Td>
-              </Tr>
-            )
-          })}
+          {proyectos.map((proyecto) => (
+            <Tr>
+              <Td>{proyecto.nombre}</Td>
+              <Td>{proyecto.tipo}</Td>
+              <Td>{proyecto.estado}</Td>
+              <Td>{proyecto.liderProyecto}</Td>
+              <Td w="100px">
+                <ActionButtons
+                  onDelete={() => {
+                    setProyectoABorrar(proyecto)
+                    onOpen()
+                  }}
+                  onEdit={() => {
+                    handleEdit(proyecto._id)
+                  }}
+                />
+              </Td>
+            </Tr>
+          ))}
         </Tbody>
       </Table>
+
       {proyectoABorrar && (
         <AdvertenciaModal
           isOpen={isOpen}
