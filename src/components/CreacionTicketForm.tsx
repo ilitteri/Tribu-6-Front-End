@@ -24,6 +24,17 @@ import { useEffect, useState } from 'react'
   //productos: any,empleados: any,clientes: any
   // TODO: agregar validaciones
 
+interface Producto {
+    id: number,
+    nombre: string,
+    versionesProducto: Array<VersionProducto>
+}
+
+interface VersionProducto {
+    id: number,
+    versionProducto: string,
+    fechaLanzamiento: Date
+}
 
   const CreacionTicketForm = () => {
     const navigate = useNavigate()
@@ -42,7 +53,7 @@ import { useEffect, useState } from 'react'
           status: 'success',
           isClosable: true,
         })
-        navigate('/tickets')
+        navigate('/soporte')
       } catch (err) {
         toast({
           title: 'Ocurrió un error al intentar crear el ticket ',
@@ -53,9 +64,14 @@ import { useEffect, useState } from 'react'
     }
 
     const [loading, setLoading] = useState(false)
-    const [productos, setProductos] = useState<any[]>([])
+    const [productos, setProductos] = useState<Producto[]>([])
     const [empleados, setEmpleados] = useState<any[]>([])
     const [clientes, setClientes] = useState<any[]>([])
+    const [productoSeleccionado, setProductoSeleccionado] = useState<any>()
+
+    function setProducto(index: number){
+      setProductoSeleccionado(productos[index])
+    }
     useEffect(() => {
       const getData = async () => {
         setLoading(true)
@@ -115,18 +131,12 @@ import { useEffect, useState } from 'react'
                 isInvalid={errors?.Productos}
               >
                 <FormLabel>Productos</FormLabel>
-                {/* TODO: obtener los productos de la api */}
                 <Select
                   id="Productos"
                   placeholder="Seleccionar producto"
-                  {...register('Productos', {
-                    required: 'Debe seleccionar un producto',
-                })}
-
-                >
-                  {productos.map((productos) => {
-                    //return <p>productos.nombre</p>
-                    return <option>{productos.nombre}</option>
+                  onChange={(e) => setProducto(parseInt(e.target.value))}>
+                  {productos.map((producto, index) => {
+                    return <option value={index}>{producto.nombre}</option>
                   })}
 
                 </Select>
@@ -140,16 +150,17 @@ import { useEffect, useState } from 'react'
                 isInvalid={errors?.Version}
               >
                 <FormLabel>Version</FormLabel>
-                {/* TODO: obtener las versiones de la api */}
                 <Select
+                  disabled={productoSeleccionado ? undefined : true}
                   id="Version"
                   placeholder="Seleccionar Version del producto"
                   {...register('idVersionProducto', {
                     required: 'Debe seleccionar una version',
                 })}
                 >
-                  <option>V1</option>
-                  <option>V2</option>
+                {productoSeleccionado ? productoSeleccionado.versionesProducto.map((version : VersionProducto) => {
+                    return <option value = {version.id}>{version.versionProducto}</option>
+                  }) : ""}
                 </Select>
                 <FormErrorMessage>
                   {errors?.Version?.message}
@@ -167,7 +178,7 @@ import { useEffect, useState } from 'react'
                 <Select
                   id="Cliente"
                   placeholder="Seleccionar Cliente"
-                  {...register('Cliente', {
+                  {...register('idCliente', {
                     required: 'Debe seleccionar un cliente',
                 })}
                 >
@@ -186,11 +197,10 @@ import { useEffect, useState } from 'react'
                 isInvalid={errors?.Persona}
               >
                 <FormLabel>Persona asignada</FormLabel>
-                {/* TODO: obtener las personas de la api de recursos */}
                 <Select
                   id="persona"
                   placeholder="Seleccionar la persona asignada al ticket"
-                  {...register('persona')}
+                  {...register('legajoEmpleado')}
                 >
                   {empleados.map((empleados) => {
                     return <option value = {empleados.id}>{empleados.Nombre + " " + empleados.Apellido}</option>
@@ -208,8 +218,8 @@ import { useEffect, useState } from 'react'
                 <FormLabel>Tipo de ticket</FormLabel>
                 <Select
                   id="tipoDeTitipocket"
-                  placeholder="tipo"
-                  {...register('tipo', {
+                  placeholder="Tipo de Ticket"
+                  {...register('tipoTicket', {
                     required: 'Debe seleccionar un tipo de ticket',
                 })}
                 >
@@ -224,7 +234,7 @@ import { useEffect, useState } from 'react'
                 <Select
                   id="Severidad"
                   placeholder="Seleccionar severidad del ticket"
-                  {...register('Severidad', {
+                  {...register('severidadTicket', {
                     required: 'Debe seleccionar una severidad',
                 })}
                 >
