@@ -5,11 +5,8 @@ import Sidebar from './components/SidebarNav'
 
 import Proyectos from './pages/Proyectos'
 import Soporte from './pages/Soporte'
-<<<<<<< HEAD
 import Inicio from './pages/Inicio'
-=======
 import VisualizacionTickets from './components/VisualizacionTickets'
->>>>>>> Agregada pantalla de visualizacion de tickets para version de producto
 
 const App = () => {
   return (
