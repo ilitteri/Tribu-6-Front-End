@@ -17,9 +17,9 @@ import {
 import { useEffect, useState } from 'react'
   import { useForm } from 'react-hook-form'
   import { useNavigate } from 'react-router-dom'
-  
+
   import { soporteAPI } from '../axios'
-  
+
 
   //productos: any,empleados: any,clientes: any
   // TODO: agregar validaciones
@@ -33,10 +33,10 @@ import { useEffect, useState } from 'react'
       register,
       formState: { errors, isSubmitting },
     } = useForm()
-  
-    const onSubmit = async (proyecto: any) => {
+
+    const onSubmit = async (ticket: any) => {
       try {
-        await soporteAPI.post('/tickets', Tickets)  // ¿esta bien esto? me tiraba error y de repente pasó
+        await soporteAPI.post('/tickets', ticket)  // ¿esta bien esto? me tiraba error y de repente pasó
         toast({
           title: 'Ticket creado',
           status: 'success',
@@ -74,7 +74,7 @@ import { useEffect, useState } from 'react'
       }
     getData()
     }, [])
-  
+
     return (
       <Box
         bg={useColorModeValue('white', 'gray.800')}
@@ -89,7 +89,7 @@ import { useEffect, useState } from 'react'
               <Input
                 id="Titulo"
                 placeholder="Titulo"
-                {...register('Titulo', {
+                {...register('titulo', {
                   required: 'No se puede crear un ticket sin titulo',
                 })}
               />
@@ -122,7 +122,7 @@ import { useEffect, useState } from 'react'
                   {...register('Productos', {
                     required: 'Debe seleccionar un producto',
                 })}
-            
+
                 >
                   {productos.map((productos) => {
                     //return <p>productos.nombre</p>
@@ -134,7 +134,7 @@ import { useEffect, useState } from 'react'
                   {errors?.Productos?.message}
                 </FormErrorMessage>
               </FormControl>
-  
+
               <FormControl
                 htmlFor="Version" isRequired
                 isInvalid={errors?.Version}
@@ -142,9 +142,9 @@ import { useEffect, useState } from 'react'
                 <FormLabel>Version</FormLabel>
                 {/* TODO: obtener las versiones de la api */}
                 <Select
-                  id="Version" 
+                  id="Version"
                   placeholder="Seleccionar Version del producto"
-                  {...register('Version', {
+                  {...register('idVersionProducto', {
                     required: 'Debe seleccionar una version',
                 })}
                 >
@@ -180,9 +180,9 @@ import { useEffect, useState } from 'react'
                   {errors?.Cliente?.message}
                 </FormErrorMessage>
               </FormControl>
-  
+
               <FormControl
-                htmlFor="Persona" 
+                htmlFor="Persona"
                 isInvalid={errors?.Persona}
               >
                 <FormLabel>Persona asignada</FormLabel>
@@ -193,7 +193,7 @@ import { useEffect, useState } from 'react'
                   {...register('persona')}
                 >
                   {empleados.map((empleados) => {
-                    return <option value = {empleados.id}>{empleados[empleados.Nombre "+" empleados.Apellido"]}</option>
+                    return <option value = {empleados.id}>{empleados.Nombre + " " + empleados.Apellido}</option>
                   })}
                 </Select>
                 <FormErrorMessage>
@@ -256,9 +256,5 @@ import { useEffect, useState } from 'react'
       </Box>
     )
   }
-  
-export default CreacionTicketForm
 
-function Tickets(arg0: string, Tickets: any) {
-    throw new Error('Function not implemented.')
-}
+export default CreacionTicketForm
