@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import { soporteAPI } from '../axios'
 import CreacionTicketForm from '../components/CreacionTicketForm'
 
-
-
 /*
 const NuevoTicket = () => {
     const [loading, setLoading] = useState(false)
@@ -36,15 +34,14 @@ const NuevoTicket = () => {
           <Flex alignItems="center" justifyContent="space-between">
             <Heading>Soporte</Heading>
           </Flex>
-          { <NuevoTicketForm
+          { <CreacionTicketForm
             productos={productos}
             empleados={empleados}
             clientes={clientes}
-            loading={loading}></NuevoTicketForm> }
+            loading={loading}></CreacionTicketForm> }
         </>
       )
 }  
-
 */
 
 const NuevoTicket = () => {
@@ -55,6 +52,7 @@ const NuevoTicket = () => {
     </>
   )
 }
+
 
 
 
