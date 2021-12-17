@@ -10,20 +10,14 @@ import {
   IconButton,
   useToast,
   useDisclosure,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
 } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 import { proyectosAPI } from '../axios'
 import EmptyProyectos from './EmptyProyectos'
+import AdvertenciaModal from './AdvertenciaModal'
 
 interface Proyecto {
   _id: number
@@ -37,52 +31,6 @@ interface Props {
   proyectos: Proyecto[]
   loading: boolean
   setProyectos: any
-}
-
-const AdvertenciaModal = ({ isOpen, onClose, onDelete, proyecto }: any) => {
-  const cancelRef = useRef(null)
-
-  if (!proyecto) {
-    return null
-  }
-
-  return (
-    <AlertDialog
-      isOpen={isOpen}
-      leastDestructiveRef={cancelRef}
-      onClose={onClose}
-      isCentered
-    >
-      <AlertDialogOverlay>
-        <AlertDialogContent>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Borrar Proyecto
-          </AlertDialogHeader>
-
-          <AlertDialogBody>
-            ¿Estás seguro que querés borrar <strong>{proyecto.nombre}</strong>{' '}
-            de forma permanente?
-          </AlertDialogBody>
-
-          <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button
-              colorScheme="red"
-              onClick={() => {
-                onDelete()
-                onClose()
-              }}
-              ml={3}
-            >
-              Borrar
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialog>
-  )
 }
 
 const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
@@ -170,12 +118,21 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
           })}
         </Tbody>
       </Table>
-      <AdvertenciaModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onDelete={() => handleDelete(proyectoABorrar._id)}
-        proyecto={proyectoABorrar}
-      />
+      {proyectoABorrar && (
+        <AdvertenciaModal
+          isOpen={isOpen}
+          onClose={onClose}
+          onDelete={() => handleDelete(proyectoABorrar._id)}
+          proyecto={proyectoABorrar}
+          alertHeader="Borrar Proyecto"
+          alertBody={
+            <>
+              ¿Estás seguro que querés borrar{' '}
+              <strong>{proyectoABorrar.nombre}</strong> de forma permanente?
+            </>
+          }
+        />
+      )}
     </>
   )
 }
