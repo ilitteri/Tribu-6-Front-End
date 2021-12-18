@@ -120,15 +120,19 @@ const CreacionTareaForm = () => {
               <FormLabel>Nombre</FormLabel>
               <Input
                 id="nombre"
-                placeholder="Nombre del proyecto"
+                placeholder="Nombre de la tarea"
                 {...register('nombre', {
-                  required: 'No se puede crear un proyecto sin nombre',
+                  required: 'No se puede crear una tarea sin nombre',
                 })}
               />
               <FormErrorMessage>{errors?.nombre?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl htmlFor="tipo" isRequired isInvalid={errors?.proyecto}>
+            <FormControl
+              htmlFor="proyecto"
+              isRequired
+              isInvalid={errors?.proyecto}
+            >
               <FormLabel>Proyecto</FormLabel>
               <Select
                 id="proyecto"
@@ -180,7 +184,7 @@ const CreacionTareaForm = () => {
             <FormLabel>Descripción</FormLabel>
             <Textarea
               id="descripcion"
-              placeholder="Agregá una descripción al proyecto..."
+              placeholder="Agregá una descripción a la tarea..."
               {...register('descripcion')}
             />
             <FormErrorMessage>{errors?.descripcion?.message}</FormErrorMessage>
