@@ -84,25 +84,36 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
           </Tr>
         </Thead>
         <Tbody>
-          {proyectos.map((proyecto) => (
-            <Tr>
-              <Td>{proyecto.nombre}</Td>
-              <Td>{proyecto.tipo}</Td>
-              <Td>{proyecto.estado}</Td>
-              <Td>{proyecto.liderProyecto}</Td>
-              <Td w="100px">
-                <ActionButtons
-                  onDelete={() => {
-                    setProyectoABorrar(proyecto)
-                    onOpen()
-                  }}
-                  onEdit={() => {
-                    handleEdit(proyecto._id)
-                  }}
-                />
-              </Td>
-            </Tr>
-          ))}
+          {proyectos.map((proyecto) => {
+            const ref = `/proyecto/${proyecto._id}`
+            return (
+              <Tr>
+                <Td cursor="pointer" onClick={() => navigate(ref)}>
+                  {proyecto.nombre}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(ref)}>
+                  {proyecto.tipo}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(ref)}>
+                  {proyecto.estado}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(ref)}>
+                  {proyecto.liderProyecto}
+                </Td>
+                <Td w="100px">
+                  <ActionButtons
+                    onDelete={() => {
+                      setProyectoABorrar(proyecto)
+                      onOpen()
+                    }}
+                    onEdit={() => {
+                      handleEdit(proyecto._id)
+                    }}
+                  />
+                </Td>
+              </Tr>
+            )
+          })}
         </Tbody>
       </Table>
 

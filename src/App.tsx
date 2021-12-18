@@ -4,6 +4,8 @@ import { ChakraProvider, theme } from '@chakra-ui/react'
 import Sidebar from './components/SidebarNav'
 
 import Proyectos from './pages/Proyectos'
+import Proyecto from './pages/Proyecto'
+import Tarea from './pages/Tarea'
 import Soporte from './pages/Soporte'
 import CreacionProyectos from './pages/CreacionProyectos'
 import Inicio from './pages/Inicio'
@@ -16,9 +18,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/proyectos" element={<Proyectos />} />
+          <Route path="/proyecto/:id" element={<Proyecto />} />
+          <Route path="/proyecto/:idProyecto/:idTarea" element={<Tarea />} />
           <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
-          <Route path="/soporte" element={<Soporte />}/>
-          <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTickets />} />
+          <Route path="/soporte" element={<Soporte />} />
+          <Route
+            path="/soporte/tickets/:idVersion"
+            element={<VisualizacionTickets />}
+          />
         </Routes>
       </Sidebar>
     </ChakraProvider>
