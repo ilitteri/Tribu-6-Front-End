@@ -27,7 +27,11 @@ const Proyectos = () => {
         {proyectos && proyectos.length > 0 && <NuevoProyectoButton />}
       </Flex>
       <Flex overflow="auto" mt="20px" alignItems="center">
-        <ListadoProyectos proyectos={proyectos} loading={loading} />
+        <ListadoProyectos
+          proyectos={proyectos}
+          setProyectos={setProyectos}
+          loading={loading}
+        />
       </Flex>
     </>
   )
