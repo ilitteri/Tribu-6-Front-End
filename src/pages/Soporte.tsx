@@ -2,6 +2,7 @@ import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { soporteAPI } from '../axios'
 import ListadoVersionesProductos from '../components/ListadoVersionesProductos'
+import NuevoTicketButton from '../components/NuevoTicketButton'
 
 const Soporte = () => {
   const [productos, setProductos] = useState<any[]>([])
@@ -26,7 +27,7 @@ const Soporte = () => {
     <>
       <Flex alignItems="center" justifyContent="space-between">
         <Heading>Soporte</Heading>
-        {productos && productos.length > 0}
+        {<NuevoTicketButton />}
       </Flex>
       <Heading as='h3' size='lg' mt="1em">Productos</Heading>
       <Flex overflow="auto">

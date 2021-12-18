@@ -9,23 +9,13 @@ import {
     Td,
     Spinner
   } from '@chakra-ui/react'
+import Empleado from '../models/Empleado'
+import Ticket from '../models/Ticket'
 
 interface Props {
   tickets: Ticket[],
   empleados: Empleado[],
   loading: boolean
-}
-interface Empleado {
-  id: number,
-  legajo: number,
-  Nombre: string,
-  Apellido: string
-}
-interface Ticket {
-  titulo: string,
-  fechaCreacion: Date,
-  severidadTicket: string,
-  legajoEmpleado: number
 }
 
 type diasSeveridad = {
