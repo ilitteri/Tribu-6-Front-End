@@ -60,9 +60,9 @@ const CreacionTareaForm = () => {
   const [recursos, setRecursos] = useState<Recurso[]>([])
   const navigate = useNavigate()
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, _setSearchParams] = useSearchParams()
   const proyectoId = searchParams.get('proyectoId')
-  const cancelURL = proyectoId ? `/proyectos/${proyectoId}` : '/proyectos'
 
   const toast = useToast()
   const {
