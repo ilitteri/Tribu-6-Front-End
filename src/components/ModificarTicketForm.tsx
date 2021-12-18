@@ -152,55 +152,6 @@ const ModificarTicketForm = () => {
         </FormControl>
 
         <HStack>
-
-          <FormControl
-            htmlFor="Productos" isRequired
-            isInvalid={errors?.Productos}
-          >
-            <FormLabel>Productos</FormLabel>
-            {/* TODO: obtener los productos de la api */}
-            <Select
-              id="Productos"
-              placeholder="Seleccionar producto"
-              {...register('Productos', {
-                required: 'Debe seleccionar un producto',
-            })}
-
-            >
-              {productos.map((productos) => {
-                //return <p>productos.nombre</p>
-                return <option>{productos.nombre}</option>
-              })}
-
-            </Select>
-            <FormErrorMessage>
-              {errors?.Productos?.message}
-            </FormErrorMessage>
-          </FormControl>
-        
-          <FormControl
-            htmlFor="Version" isRequired
-            isInvalid={errors?.Version}
-          >
-            <FormLabel>Version</FormLabel>
-            {/* TODO: obtener las versiones de la api */}
-            <Select
-              id="Version"
-              placeholder="Seleccionar Version del producto"
-              {...register('idVersionProducto', {
-                required: 'Debe seleccionar una version',
-            })}
-            >
-              <option>V1</option>
-              <option>V2</option>
-            </Select>
-            <FormErrorMessage>
-              {errors?.Version?.message}
-            </FormErrorMessage>
-          </FormControl>
-        </HStack>
-
-        <HStack>
           <FormControl
             htmlFor="Cliente" isRequired
             isInvalid={errors?.Cliente}
@@ -233,7 +184,7 @@ const ModificarTicketForm = () => {
             <Select
               id="persona"
               placeholder="Seleccionar la persona asignada al ticket"
-              defaultValue = {empleado?.Nombre + " " + empleado?.Apellido}
+              defaultValue = {empleados.filter(empleados =>empleados.legajo === ticket?.legajoEmpleado)}
               {...register('persona')}
             >
               {empleados.map((empleados) => {       
