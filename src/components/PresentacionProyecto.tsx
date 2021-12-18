@@ -78,7 +78,10 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
                 <InfoLabels titulo="Tipo:" info={proyecto[0].tipo} />
               </Td>
               <Td>
-                <InfoLabels titulo="Líder:" info={proyecto[0].liderProyecto} />
+                <InfoLabels
+                  titulo="Líder:"
+                  info={proyecto[0].liderProyecto || 'Sin asignar'}
+                />
               </Td>
             </Tr>
             <Tr>
@@ -101,7 +104,7 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
       </Flex>
       <Flex direction="column" mt="30px">
         <Text fontWeight="bold">Descripción: </Text>
-        <Text>{proyecto[0].descripcion}</Text>
+        <Text>{proyecto[0].descripcion || 'No hay descripción.'}</Text>
       </Flex>
     </Flex>
   ) : (
@@ -110,6 +113,7 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
 }
 
 function dateFromISO(isoDate: string) {
+  if (!isoDate) return '-'
   return new Date(isoDate).toLocaleDateString('es-ES', {
     year: 'numeric',
     month: 'numeric',
