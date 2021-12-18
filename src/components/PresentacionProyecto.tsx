@@ -55,8 +55,6 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
     )
   }
 
-  console.log(proyecto)
-
   return proyecto && proyecto.length !== 0 ? (
     <Flex direction="column" justifyContent="flex-start">
       <Flex>
@@ -78,7 +76,10 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
                 <InfoLabels titulo="Tipo:" info={proyecto[0].tipo} />
               </Td>
               <Td>
-                <InfoLabels titulo="Líder:" info={proyecto[0].liderProyecto} />
+                <InfoLabels
+                  titulo="Líder:"
+                  info={proyecto[0].liderProyecto || 'Sin asignar'}
+                />
               </Td>
             </Tr>
             <Tr>
@@ -101,7 +102,7 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
       </Flex>
       <Flex direction="column" mt="30px">
         <Text fontWeight="bold">Descripción: </Text>
-        <Text>{proyecto[0].descripcion}</Text>
+        <Text>{proyecto[0].descripcion || 'No hay descripción.'}</Text>
       </Flex>
     </Flex>
   ) : (
@@ -110,15 +111,14 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
 }
 
 function dateFromISO(isoDate: string) {
-  return new Date(isoDate).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: undefined,
-    minute: undefined,
-    hour12: false,
-    timeZone: undefined,
-  })
+  if (!isoDate) return '-'
+
+  const date = new Date(isoDate)
+  const day = date.getUTCDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+
+  return `${day}/${month}/${year}`
 }
 
 export default PresentacionProyecto

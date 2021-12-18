@@ -11,6 +11,7 @@ import CreacionProyectos from './pages/CreacionProyectos'
 import CreacionTareas from './pages/CreacionTareas'
 import Inicio from './pages/Inicio'
 import VisualizacionTickets from './components/VisualizacionTickets'
+import ModificacionProyectos from './pages/ModificacionProyectos'
 import NuevoTicket from './components/NuevoTicket'
 
 const App = () => {
@@ -21,6 +22,10 @@ const App = () => {
           <Route path="/" element={<Inicio />} />
           <Route path="/proyectos" element={<Proyectos />} />
           <Route path="/proyectos/:id" element={<Proyecto />} />
+          <Route
+            path="/proyectos/:id/editar"
+            element={<ModificacionProyectos />}
+          />
           <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
           <Route path="/proyectos/:idProyecto/:idTarea" element={<Tarea />} />
           <Route path="/tarea/nuevo" element={<CreacionTareas />} />

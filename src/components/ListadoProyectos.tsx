@@ -98,7 +98,7 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
                   {proyecto.estado}
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(ref)}>
-                  {proyecto.liderProyecto}
+                  {proyecto.liderProyecto || 'Sin asignar'}
                 </Td>
                 <Td w="100px">
                   <ActionButtons

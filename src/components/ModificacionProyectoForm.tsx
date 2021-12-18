@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { proyectosAPI, recursosAPI } from '../axios'
 
@@ -26,13 +26,28 @@ interface Recurso {
   Apellido: string
 }
 
+const estados = [
+  {
+    value: 'No Iniciado',
+    nombre: 'No Iniciado',
+  },
+  {
+    value: 'En desarrollo',
+    nombre: 'En desarrollo',
+  },
+  {
+    value: 'Terminado',
+    nombre: 'Terminado',
+  },
+]
+
 const opcionesTipoProyecto = [
   {
     value: 'Desarrollo',
     nombre: 'Desarrollo',
   },
   {
-    value: 'Implementacion',
+    value: 'Implementación',
     nombre: 'Implementación',
   },
 ]
@@ -48,8 +63,9 @@ const validateFechas = ({ fechaInicio, fechaFin }: any) => {
   return fInicio <= fFin
 }
 
-const CreacionProyectoForm = () => {
+const ModificacionProyectoForm = () => {
   const [recursos, setRecursos] = useState<Recurso[]>([])
+  const [proyecto, setProyecto] = useState<any>([])
   const navigate = useNavigate()
   const toast = useToast()
   const {
@@ -57,15 +73,30 @@ const CreacionProyectoForm = () => {
     register,
     formState: { errors, isSubmitting },
     getValues,
+    reset,
   } = useForm()
+  const { id: proyectoId } = useParams()
 
   useEffect(() => {
     const fetchRecursos = async () => {
       const res = await recursosAPI.get('/recursos')
       setRecursos(res.data)
     }
+
+    const fetchProyecto = async (proyectoId: any) => {
+      const res = await proyectosAPI.get(`/projects?projectId=${proyectoId}`) // >:)
+      const proy = res.data.message[0]
+      setProyecto(proy)
+      reset({
+        ...proy,
+        fechaInicio: formatDate(proy.fechaInicio),
+        fechaFin: formatDate(proy.fechaFin),
+      })
+    }
+
+    fetchProyecto(proyectoId)
     fetchRecursos()
-  }, [])
+  }, [proyectoId, reset])
 
   const onCancel = () => {
     toast({
@@ -78,16 +109,16 @@ const CreacionProyectoForm = () => {
 
   const onSubmit = async (proyecto: any) => {
     try {
-      await proyectosAPI.post('/projects', proyecto)
+      await proyectosAPI.patch(`/projects/${proyecto._id}`, proyecto)
       toast({
-        title: '¡Se creó el proyecto! 🥳',
+        title: '¡Se modificó el proyecto!👌',
         status: 'success',
         isClosable: true,
       })
-      navigate('/proyectos')
+      navigate(-1)
     } catch (err) {
       toast({
-        title: 'Ocurrió un error al intentar crear el proyecto 😔',
+        title: 'Ocurrió un error al intentar modificar el proyecto 😔',
         status: 'error',
         isClosable: true,
       })
@@ -109,7 +140,7 @@ const CreacionProyectoForm = () => {
               id="nombre"
               placeholder="Nombre del proyecto"
               {...register('nombre', {
-                required: 'No se puede crear un proyecto sin nombre',
+                required: 'No se puede quitar el nombre a un proyecto',
               })}
             />
             <FormErrorMessage>{errors?.nombre?.message}</FormErrorMessage>
@@ -123,11 +154,15 @@ const CreacionProyectoForm = () => {
                 placeholder="Seleccionar tipo"
                 {...register('tipo')}
               >
-                {opcionesTipoProyecto.map(({ value, nombre }) => (
-                  <option key={value} value={value}>
-                    {nombre}
-                  </option>
-                ))}
+                {opcionesTipoProyecto.map(({ value, nombre }) => {
+                  const selected = proyecto?.tipo === nombre
+
+                  return (
+                    <option key={value} value={value} selected={selected}>
+                      {nombre}
+                    </option>
+                  )
+                })}
               </Select>
               <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
             </FormControl>
@@ -155,12 +190,18 @@ const CreacionProyectoForm = () => {
                 placeholder="Seleccionar líder"
                 {...register('liderProyecto')}
               >
-                {recursos?.map(({ Nombre, Apellido, legajo }) => (
-                  <option
-                    key={`${legajo}-${Nombre}-${Apellido}`}
-                    value={`${Nombre} ${Apellido}`}
-                  >{`${Nombre} ${Apellido}`}</option>
-                ))}
+                {recursos?.map(({ Nombre, Apellido, legajo }) => {
+                  const selected =
+                    proyecto?.liderProyecto === `${Nombre} ${Apellido}`
+
+                  return (
+                    <option
+                      key={`${legajo}-${Nombre}-${Apellido}`}
+                      value={`${Nombre} ${Apellido}`}
+                      selected={selected}
+                    >{`${Nombre} ${Apellido}`}</option>
+                  )
+                })}
               </Select>
               <FormErrorMessage>
                 {errors?.liderProyecto?.message}
@@ -184,11 +225,35 @@ const CreacionProyectoForm = () => {
             </FormControl>
           </HStack>
 
+          <FormControl htmlFor="estado" isRequired isInvalid={errors?.estado}>
+            <FormLabel>Estado</FormLabel>
+            <Select
+              id="estado"
+              placeholder="Seleccionar estado"
+              {...register('estado')}
+            >
+              {estados?.map((estado: any) => {
+                const selected = proyecto?.estado === estado.nombre
+
+                return (
+                  <option
+                    key={estado.value}
+                    value={estado.value}
+                    selected={selected}
+                  >
+                    {estado.nombre}
+                  </option>
+                )
+              })}
+            </Select>
+            <FormErrorMessage>{errors?.estado?.message}</FormErrorMessage>
+          </FormControl>
+
           <FormControl htmlFor="descripcion" isInvalid={errors?.descripcion}>
             <FormLabel>Descripción</FormLabel>
             <Textarea
               id="descripcion"
-              placeholder="Agregá una descripción al proyecto..."
+              placeholder="Modificá la descripción al proyecto..."
               {...register('descripcion')}
             />
             <FormErrorMessage>{errors?.descripcion?.message}</FormErrorMessage>
@@ -200,7 +265,7 @@ const CreacionProyectoForm = () => {
                 Cancelar
               </Button>
               <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-                Crear proyecto
+                Guardar
               </Button>
             </ButtonGroup>
           </Flex>
@@ -210,4 +275,15 @@ const CreacionProyectoForm = () => {
   )
 }
 
-export default CreacionProyectoForm
+function formatDate(isoDate: string) {
+  if (!isoDate) return isoDate
+
+  const date = new Date(isoDate)
+  const day = date.getUTCDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+
+  return `${year}-${month}-${day}`
+}
+
+export default ModificacionProyectoForm
