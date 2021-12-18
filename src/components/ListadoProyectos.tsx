@@ -72,6 +72,7 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
   return proyectos && proyectos.length === 0 ? (
     <EmptyProyectos />
   ) : (
+    <>
     <Table variant="striped" colorScheme="teal">
       <Thead>
         <Tr>
