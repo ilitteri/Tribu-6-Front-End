@@ -18,31 +18,13 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import { proyectosAPI } from '../axios'
+import { proyectosAPI, recursosAPI } from '../axios'
 
 interface Recurso {
   legajo: number
   Nombre: string
   Apellido: string
 }
-
-const mockRecursos: Recurso[] = [
-  {
-    legajo: 1,
-    Nombre: 'Mario',
-    Apellido: 'Mendoza',
-  },
-  {
-    legajo: 2,
-    Nombre: 'Maria',
-    Apellido: 'Perez',
-  },
-  {
-    legajo: 3,
-    Nombre: 'Patricia',
-    Apellido: 'Gaona',
-  },
-]
 
 const opcionesTipoProyecto = [
   {
@@ -79,10 +61,8 @@ const CreacionProyectoForm = () => {
 
   useEffect(() => {
     const fetchRecursos = async () => {
-      // TODO: Descomentar al resolver problema de cors
-      // const res = await recursosAPI.get('/recursos')
-      // setRecursos(res.data)
-      setRecursos(mockRecursos)
+      const res = await recursosAPI.get('/recursos')
+      setRecursos(res.data)
     }
     fetchRecursos()
   }, [])

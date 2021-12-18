@@ -2,7 +2,7 @@ import { Heading, Flex } from '@chakra-ui/react'
 
 import NuevaTareaButton from './NuevaTareaButton'
 
-const EmptyTareas = () => {
+const EmptyTareas = ({ proyectoId }: any) => {
   return (
     <Flex
       direction="column"
@@ -16,7 +16,7 @@ const EmptyTareas = () => {
       <Heading size="lg" mb="20px">
         Todavía no hay tareas creadas. ¡Creá una!
       </Heading>
-      <NuevaTareaButton />
+      <NuevaTareaButton proyectoId={proyectoId} />
     </Flex>
   )
 }

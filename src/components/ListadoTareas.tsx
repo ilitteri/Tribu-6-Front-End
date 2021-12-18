@@ -21,11 +21,12 @@ interface Tarea {
 }
 
 interface Props {
+  proyectoId: number
   tareas: Tarea[]
   loading: boolean
 }
 
-const ListadoTareas = ({ tareas, loading }: Props) => {
+const ListadoTareas = ({ proyectoId, tareas, loading }: Props) => {
   const navigate = useNavigate()
   const { id } = useParams()
   if (loading) {
@@ -37,7 +38,7 @@ const ListadoTareas = ({ tareas, loading }: Props) => {
   }
 
   return tareas && tareas.length === 0 ? (
-    <EmptyTareas />
+    <EmptyTareas proyectoId={proyectoId} />
   ) : (
     <>
       <Flex direction="column" width="100%">
@@ -53,7 +54,7 @@ const ListadoTareas = ({ tareas, loading }: Props) => {
           <Table variant="striped" colorScheme="teal">
             <Tbody>
               {tareas.map((tarea) => {
-                const ref = `/proyecto/${id}/${tarea._id}`
+                const ref = `/proyectos/${id}/${tarea._id}`
                 return (
                   <Tr>
                     <Td
