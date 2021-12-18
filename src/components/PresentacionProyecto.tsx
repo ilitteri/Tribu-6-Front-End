@@ -55,8 +55,6 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
     )
   }
 
-  console.log(proyecto)
-
   return proyecto && proyecto.length !== 0 ? (
     <Flex direction="column" justifyContent="flex-start">
       <Flex>
@@ -114,15 +112,13 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
 
 function dateFromISO(isoDate: string) {
   if (!isoDate) return '-'
-  return new Date(isoDate).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: undefined,
-    minute: undefined,
-    hour12: false,
-    timeZone: undefined,
-  })
+
+  const date = new Date(isoDate)
+  const day = date.getUTCDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+
+  return `${day}/${month}/${year}`
 }
 
 export default PresentacionProyecto
