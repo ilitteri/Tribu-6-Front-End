@@ -16,6 +16,7 @@ import Soporte from './pages/Soporte'
 import NuevoTicket from './components/NuevoTicket'
 import VisualizacionTicketsVersion from './components/VisualizacionTicketsVersion'
 import TicketView from './pages/Ticket'
+import ModificarTicket from './components/ModificarTicket'
 
 import theme from './theme'
 
@@ -46,6 +47,7 @@ const App = () => {
           />
           <Route path="/soporte/ticket/:id" element={<TicketView />} />
           <Route path="/soporte/nuevo" element={<NuevoTicket />} />
+          <Route path="/soporte/ticket/:id/editar" element={<ModificarTicket />} />
         </Routes>
       </Sidebar>
     </ChakraProvider>

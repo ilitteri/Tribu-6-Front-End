@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Empleado from '../models/Empleado'
 import Ticket from '../models/Ticket'
+import VisualizarTicketButton from './ModificarTicketButton'
 
 interface Props {
   tickets: Ticket[],
@@ -114,8 +115,8 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                 <Td w="15%">{getNombreEmpleado(ticket.legajoEmpleado)}</Td>
                 <Td w="10%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
                 <Td w="10%">{estadosTicket[ticket.estadoTicket]}</Td>
-                <Td w="15%">ACCIONES</Td>
-                {/* definir acciones */}
+                <Td w="15%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
+                <Td w="20%">{<VisualizarTicketButton ticketID = {ticket.numeroTicket}/>}</Td>
               </Tr>
             )
           })}
