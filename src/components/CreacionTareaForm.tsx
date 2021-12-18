@@ -20,6 +20,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { proyectosAPI } from '../axios'
 
+interface Proyecto {
+  _id: number
+  nombre: string
+  estado: string
+  descripcion: string
+  liderProyecto: string
+  tipo: string
+  fechaInicio: string
+  fechaFin: string
+}
+
 interface Recurso {
   legajo: number
   Nombre: string
@@ -44,21 +55,12 @@ const mockRecursos: Recurso[] = [
   },
 ]
 
-const opcionesTipoProyecto = [
-  {
-    value: 'Desarrollo',
-    nombre: 'Desarrollo',
-  },
-  {
-    value: 'Implementacion',
-    nombre: 'Implementación',
-  },
-]
-
 const CreacionTareaForm = () => {
+  const [proyectos, setProyectos] = useState<Proyecto[]>([])
   const [recursos, setRecursos] = useState<Recurso[]>([])
   const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [searchParams, _setSearchParams] = useSearchParams()
   const proyectoId = searchParams.get('proyectoId')
   const cancelURL = proyectoId ? `/proyectos/${proyectoId}` : '/proyectos'
 
@@ -67,28 +69,34 @@ const CreacionTareaForm = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    getValues,
   } = useForm()
 
   useEffect(() => {
+    const fetchProyectos = async () => {
+      const res = await proyectosAPI.get('/projects')
+      setProyectos(res.data.message)
+    }
+
     const fetchRecursos = async () => {
       // TODO: Descomentar al resolver problema de cors
       // const res = await recursosAPI.get('/recursos')
       // setRecursos(res.data)
       setRecursos(mockRecursos)
     }
+
+    fetchProyectos()
     fetchRecursos()
   }, [])
 
-  const onSubmit = async (proyecto: any) => {
+  const onSubmit = async (tarea: any) => {
     try {
-      await proyectosAPI.post('/projects', proyecto)
+      await proyectosAPI.post(`/projects/${proyectoId}/tasks`, tarea)
       toast({
         title: '¡Se creó la tarea! 🥳',
         status: 'success',
         isClosable: true,
       })
-      navigate('/')
+      navigate(-1)
     } catch (err) {
       toast({
         title: 'Ocurrió un error al intentar crear tarea 😔',
@@ -120,33 +128,40 @@ const CreacionTareaForm = () => {
               <FormErrorMessage>{errors?.nombre?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl htmlFor="tipo" isRequired isInvalid={errors?.tipo}>
+            <FormControl htmlFor="tipo" isRequired isInvalid={errors?.proyecto}>
               <FormLabel>Proyecto</FormLabel>
               <Select
                 id="proyecto"
-                placeholder="Seleccionar tipo"
-                {...register('tipo')}
+                placeholder="Seleccionar proyecto"
+                {...register('proyecto')}
               >
-                {opcionesTipoProyecto.map(({ value, nombre }) => (
-                  <option key={value} value={value}>
-                    {nombre}
-                  </option>
-                ))}
+                {proyectos?.map((proyecto) => {
+                  const selected = proyecto._id.toString() === proyectoId
+                  return (
+                    <option
+                      key={proyecto._id}
+                      value={proyecto._id}
+                      selected={selected}
+                    >
+                      {proyecto.nombre}
+                    </option>
+                  )
+                })}
               </Select>
-              <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors?.proyecto?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
 
           <HStack>
             <FormControl
-              htmlFor="liderProyecto"
+              htmlFor="empleadosResponsables"
               isInvalid={errors?.liderProyecto}
             >
-              <FormLabel>Líder</FormLabel>
+              <FormLabel>Empleado responsable</FormLabel>
               <Select
-                id="liderProyecto"
-                placeholder="Seleccionar líder"
-                {...register('liderProyecto')}
+                id="empleadosResponsables"
+                placeholder="Seleccionar empleado"
+                {...register('empleadosResponsables')}
               >
                 {recursos?.map(({ Nombre, Apellido, legajo }) => (
                   <option
@@ -156,7 +171,7 @@ const CreacionTareaForm = () => {
                 ))}
               </Select>
               <FormErrorMessage>
-                {errors?.liderProyecto?.message}
+                {errors?.empleadosResponsable?.message}
               </FormErrorMessage>
             </FormControl>
           </HStack>
@@ -173,14 +188,11 @@ const CreacionTareaForm = () => {
 
           <Flex w="100%" justifyContent="end">
             <ButtonGroup spacing="6">
-              <Button
-                onClick={() => navigate(cancelURL)}
-                disabled={isSubmitting}
-              >
+              <Button onClick={() => navigate(-1)} disabled={isSubmitting}>
                 Cancelar
               </Button>
               <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-                Crear proyecto
+                Crear tarea
               </Button>
             </ButtonGroup>
           </Flex>
