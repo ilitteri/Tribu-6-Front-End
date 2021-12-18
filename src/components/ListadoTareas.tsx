@@ -1,46 +1,50 @@
 import {
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Tbody,
-    Td,
-    Spinner,
-    Flex,
-  } from '@chakra-ui/react'
-  
-  import EmptyTareas from './EmptyTareas'
-  import Scroll from '../components/Scroll'
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Spinner,
+  Flex,
+} from '@chakra-ui/react'
 
-  interface Tarea {
-    id: number
-    nombre: string
-    estado: string
+import { useNavigate, useParams } from 'react-router-dom'
+
+import EmptyTareas from './EmptyTareas'
+import Scroll from '../components/Scroll'
+
+interface Tarea {
+  _id: number
+  nombre: string
+  estado: string
+}
+
+interface Props {
+  tareas: Tarea[]
+  loading: boolean
+}
+
+const ListadoTareas = ({ tareas, loading }: Props) => {
+  const navigate = useNavigate()
+  const { id } = useParams()
+  if (loading) {
+    return (
+      <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
+        <Spinner />
+      </Flex>
+    )
   }
-  
-  interface Props {
-    tareas: Tarea[]
-    loading: boolean
-  }
-  
-  const ListadoTareas = ({ tareas, loading }: Props) => {
-    if (loading) {
-      return (
-        <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
-          <Spinner />
-        </Flex>
-      )
-    }
-  
-    return tareas && tareas.length === 0 ? (
-      <EmptyTareas />
-    ) : (
-      <>
-      <Flex direction="column" style={{width:"100%"}}>
+
+  return tareas && tareas.length === 0 ? (
+    <EmptyTareas />
+  ) : (
+    <>
+      <Flex direction="column" width="100%">
         <Table variant="striped" colorScheme="teal">
           <Thead>
             <Tr>
-              <Th style={{width: "49.5%"}}>Nombre</Th>
+              <Th style={{ width: '49.5%' }}>Nombre</Th>
               <Th>Estado</Th>
             </Tr>
           </Thead>
@@ -49,10 +53,26 @@ import {
           <Table variant="striped" colorScheme="teal">
             <Tbody>
               {tareas.map((tarea) => {
+                const ref = `/proyecto/${id}/${tarea._id}`
                 return (
                   <Tr>
-                    <Td style={{width: "50%"}}>{tarea.nombre}</Td>
-                    <Td >{tarea.estado}</Td>
+                    <Td
+                      cursor="pointer"
+                      onClick={() => {
+                        navigate(ref)
+                      }}
+                      style={{ width: '50%' }}
+                    >
+                      {tarea.nombre}
+                    </Td>
+                    <Td
+                      cursor="pointer"
+                      onClick={() => {
+                        navigate(ref)
+                      }}
+                    >
+                      {tarea.estado}
+                    </Td>
                   </Tr>
                 )
               })}
@@ -60,9 +80,8 @@ import {
           </Table>
         </Scroll>
       </Flex>
-      </>
-    )
-  }
-  
-  export default ListadoTareas
-  
+    </>
+  )
+}
+
+export default ListadoTareas

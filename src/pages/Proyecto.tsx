@@ -1,18 +1,19 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-
+import { useNavigate, useParams } from 'react-router-dom'
 import { proyectosAPI } from '../axios'
 
 import ListadoTareas from '../components/ListadoTareas'
 import NuevaTareaButton from '../components/NuevaTareaButton'
+import AtrasButton from '../components/AtrasButton'
 import PresentacionProyecto from '../components/PresentacionProyecto'
 
 const Proyecto = () => {
   const [proyecto, setProyecto] = useState<any[]>([])
   const [tareas, setTareas] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
-  const { id } = useParams();
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getProyecto = async () => {
@@ -21,7 +22,7 @@ const Proyecto = () => {
       setProyecto(res.data.message)
       setLoading(false)
     }
-    
+
     const getTareas = async () => {
       setLoading(true)
       const res = await proyectosAPI.get(`/projects/${id}/tasks`)
@@ -31,19 +32,17 @@ const Proyecto = () => {
     getProyecto()
     getTareas()
   }, [id])
-  
-  return(
+
+  return (
     <>
-      <Flex overflow="auto" mt="20px" alignItems="center">
-        <PresentacionProyecto proyecto={proyecto} loading={loading}/>
-      </Flex>
-      <br />
-      <Flex alignItems="center" justifyContent="space-between">
+      <PresentacionProyecto proyecto={proyecto} loading={loading} />
+      <Flex alignItems="center" justifyContent="space-between" mt="50px">
         <Heading>Tareas</Heading>
         {tareas && tareas.length > 0 && <NuevaTareaButton />}
       </Flex>
-      <Flex overflow="auto" mt="20px" alignItems="center">
-        <ListadoTareas tareas={tareas} loading={loading} />
+      <ListadoTareas tareas={tareas} loading={loading} />
+      <Flex justifyContent="flex-end" mt="10px">
+        <AtrasButton referencia="/proyectos" />
       </Flex>
     </>
   )
