@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { proyectosAPI } from '../axios'
 
 import ListadoTareas from '../components/ListadoTareas'
@@ -13,7 +13,6 @@ const Proyecto = () => {
   const [tareas, setTareas] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const { id } = useParams()
-  const navigate = useNavigate()
 
   useEffect(() => {
     const getProyecto = async () => {

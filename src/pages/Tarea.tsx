@@ -4,15 +4,11 @@ import { useParams } from 'react-router-dom'
 
 import { proyectosAPI } from '../axios'
 
-import ListadoTareas from '../components/ListadoTareas'
-import NuevaTareaButton from '../components/NuevaTareaButton'
 import AtrasButton from '../components/AtrasButton'
-import PresentacionProyecto from '../components/PresentacionProyecto'
 import PresentacionTarea from '../components/PresentacionTarea'
 
 const Proyecto = () => {
   const [tarea, setTarea] = useState<any[]>([])
-  const [tikets, setTikets] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const { idProyecto, idTarea } = useParams()
 
