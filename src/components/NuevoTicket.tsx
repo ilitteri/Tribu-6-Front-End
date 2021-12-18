@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { soporteAPI } from '../axios'
 import CreacionTicketForm from '../components/CreacionTicketForm'
 
-/*
 const NuevoTicket = () => {
     const [loading, setLoading] = useState(false)
     const [productos, setProductos] = useState<any[]>([])
@@ -11,28 +10,28 @@ const NuevoTicket = () => {
     const [clientes, setClientes] = useState<any[]>([])
 
     useEffect(() => {
-        const getData = async () => {
-          setLoading(true)
-          try {
-            const productos = await soporteAPI.get('/productos')
-            const empleados = await soporteAPI.get('/empleados')
-            const clientes = await soporteAPI.get('/clientes')
-            setProductos(productos.data)
-            setEmpleados(empleados.data)
-            setClientes(clientes.data)
-            setLoading(false)
-          } catch {
-            //handlear
-            setLoading(false)
-          }
+      const getData = async () => {
+        setLoading(true)
+        try {
+          const productos = await soporteAPI.get('/productos')
+          const empleados = await soporteAPI.get('/empleados')
+          const clientes = await soporteAPI.get('/clientes')
+          setProductos(productos.data)
+          setEmpleados(empleados.data)
+          setClientes(clientes.data)
+          setLoading(false)
+        } catch {
+          //handlear
+          setLoading(false)
         }
-        getData()
-      }, [])
+      }
+    getData()
+    }, [])
 
     return (
         <>
           <Flex alignItems="center" justifyContent="space-between">
-            <Heading>Soporte</Heading>
+            <Heading>Nuevo Ticket</Heading>
           </Flex>
           { <CreacionTicketForm
             productos={productos}
@@ -41,19 +40,6 @@ const NuevoTicket = () => {
             loading={loading}></CreacionTicketForm> }
         </>
       )
-}  
-*/
-
-const NuevoTicket = () => {
-  return (
-    <>
-      <Heading>Nuevo Ticket</Heading>
-      <CreacionTicketForm />
-    </>
-  )
 }
-
-
-
 
 export default NuevoTicket

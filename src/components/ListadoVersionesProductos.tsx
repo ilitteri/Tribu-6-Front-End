@@ -10,17 +10,7 @@ import {
     Heading,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-interface Producto {
-    id: number,
-    nombre: string,
-    versionesProducto: Array<VersionProducto>
-}
-
-interface VersionProducto {
-    id: number,
-    versionProducto: string,
-    fechaLanzamiento: Date
-}
+import Producto from '../models/Producto';
 
 interface Props {
     productos: Producto[]
@@ -73,6 +63,9 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
                         {producto.versionesProducto.map((version) => {
                             return (
                             <Tr
+                            _hover={{
+                                fontWeight: 'bold'
+                            }}
                             cursor="pointer" onClick={() => navigate('tickets/' + version.id, { state: {producto: producto.nombre, version: version.versionProducto} } )}>
                                 <Td width="50%">{version.versionProducto}</Td>
                                 <Td>{parseDate(version.fechaLanzamiento)}</Td>

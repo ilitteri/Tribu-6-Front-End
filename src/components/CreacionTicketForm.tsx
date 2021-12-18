@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     ButtonGroup,
     Flex,
@@ -10,33 +9,28 @@ import {
     Select,
     Stack,
     Textarea,
-    useColorModeValue,
     useToast,
     FormErrorMessage,
-  } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-  import { useForm } from 'react-hook-form'
-  import { useNavigate } from 'react-router-dom'
+    Spinner
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
-  import { soporteAPI } from '../axios'
+import { soporteAPI } from '../axios'
+import Producto from '../models/Producto'
+import Empleado from '../models/Empleado'
+import Cliente from '../models/Cliente'
+import VersionProducto from '../models/VersionProducto'
 
-
-  //productos: any,empleados: any,clientes: any
-  // TODO: agregar validaciones
-
-interface Producto {
-    id: number,
-    nombre: string,
-    versionesProducto: Array<VersionProducto>
+interface Props {
+  productos: Producto[],
+  empleados: Empleado[],
+  clientes: Cliente[],
+  loading: boolean
 }
 
-interface VersionProducto {
-    id: number,
-    versionProducto: string,
-    fechaLanzamiento: Date
-}
-
-  const CreacionTicketForm = () => {
+  const CreacionTicketForm = ({ productos, empleados, clientes, loading }: Props) => {
     const navigate = useNavigate()
     const toast = useToast()
     const {
@@ -47,7 +41,7 @@ interface VersionProducto {
 
     const onSubmit = async (ticket: any) => {
       try {
-        await soporteAPI.post('/tickets', ticket)  // ¿esta bien esto? me tiraba error y de repente pasó
+        await soporteAPI.post('/tickets', ticket)
         toast({
           title: 'Ticket creado',
           status: 'success',
@@ -63,41 +57,21 @@ interface VersionProducto {
       }
     }
 
-    const [loading, setLoading] = useState(false)
-    const [productos, setProductos] = useState<Producto[]>([])
-    const [empleados, setEmpleados] = useState<any[]>([])
-    const [clientes, setClientes] = useState<any[]>([])
     const [productoSeleccionado, setProductoSeleccionado] = useState<any>()
 
     function setProducto(index: number){
       setProductoSeleccionado(productos[index])
     }
-    useEffect(() => {
-      const getData = async () => {
-        setLoading(true)
-        try {
-          const productos = await soporteAPI.get('/productos')
-          const empleados = await soporteAPI.get('/empleados')
-          const clientes = await soporteAPI.get('/clientes')
-          setProductos(productos.data)
-          setEmpleados(empleados.data)
-          setClientes(clientes.data)
-          setLoading(false)
-        } catch {
-          //handlear
-          setLoading(false)
-        }
-      }
-    getData()
-    }, [])
+
+    if (loading) {
+      return (
+        <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
+          <Spinner />
+        </Flex>
+      )
+    }
 
     return (
-      <Box
-        bg={useColorModeValue('white', 'gray.800')}
-        p="20px"
-        rounded="md"
-        mt="20px"
-      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
             <FormControl htmlFor="Titulo" isRequired isInvalid={errors?.Titulo}>
@@ -200,7 +174,9 @@ interface VersionProducto {
                 <Select
                   id="persona"
                   placeholder="Seleccionar la persona asignada al ticket"
-                  {...register('legajoEmpleado')}
+                  {...register('legajoEmpleado', {
+                    shouldUnregister: true
+                  })}
                 >
                   {empleados.map((empleados) => {
                     return <option value = {empleados.id}>{empleados.Nombre + " " + empleados.Apellido}</option>
@@ -238,7 +214,7 @@ interface VersionProducto {
                     required: 'Debe seleccionar una severidad',
                 })}
                 >
-                  {/* Habria que configurar que al ser un ticket de consulta no deje poner la severidad */}
+                  <option value="SIN_SEVERIDAD">Sin severidad</option>
                   <option>S1</option>
                   <option>S2</option>
                   <option>S3</option>
@@ -251,9 +227,8 @@ interface VersionProducto {
             <Flex w="100%" justifyContent="end">
               <ButtonGroup spacing="6">
                 <Button
-                  onClick={() => navigate('/proyectos')}
-                  disabled={isSubmitting}
-                >
+                  onClick={() => navigate('/soporte')}
+                  disabled={isSubmitting}>
                   Cancelar
                 </Button>
                 <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
@@ -263,7 +238,6 @@ interface VersionProducto {
             </Flex>
           </Stack>
         </form>
-      </Box>
     )
   }
 
