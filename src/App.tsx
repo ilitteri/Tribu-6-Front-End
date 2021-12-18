@@ -8,6 +8,7 @@ import Proyecto from './pages/Proyecto'
 import Tarea from './pages/Tarea'
 import Soporte from './pages/Soporte'
 import CreacionProyectos from './pages/CreacionProyectos'
+import CreacionTareas from './pages/CreacionTareas'
 import Inicio from './pages/Inicio'
 import VisualizacionTickets from './components/VisualizacionTickets'
 
@@ -18,9 +19,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/proyectos" element={<Proyectos />} />
-          <Route path="/proyecto/:id" element={<Proyecto />} />
-          <Route path="/proyecto/:idProyecto/:idTarea" element={<Tarea />} />
+          <Route path="/proyectos/:id" element={<Proyecto />} />
           <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
+          <Route path="/proyectos/:idProyecto/:idTarea" element={<Tarea />} />
+          <Route path="/tarea/nuevo" element={<CreacionTareas />} />
           <Route path="/soporte" element={<Soporte />} />
           <Route
             path="/soporte/tickets/:idVersion"

@@ -37,9 +37,15 @@ const Proyecto = () => {
       <PresentacionProyecto proyecto={proyecto} loading={loading} />
       <Flex alignItems="center" justifyContent="space-between" mt="50px">
         <Heading>Tareas</Heading>
-        {tareas && tareas.length > 0 && <NuevaTareaButton />}
+        {tareas && tareas.length > 0 && (
+          <NuevaTareaButton proyectoId={proyecto[0]?._id} />
+        )}
       </Flex>
-      <ListadoTareas tareas={tareas} loading={loading} />
+      <ListadoTareas
+        proyectoId={proyecto[0]?._id}
+        tareas={tareas}
+        loading={loading}
+      />
       <Flex justifyContent="flex-end" mt="10px">
         <AtrasButton referencia="/proyectos" />
       </Flex>

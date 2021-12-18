@@ -85,7 +85,7 @@ const ListadoProyectos = ({ proyectos, setProyectos, loading }: Props) => {
         </Thead>
         <Tbody>
           {proyectos.map((proyecto) => {
-            const ref = `/proyecto/${proyecto._id}`
+            const ref = `/proyectos/${proyecto._id}`
             return (
               <Tr>
                 <Td cursor="pointer" onClick={() => navigate(ref)}>

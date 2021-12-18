@@ -40,7 +40,7 @@ const Proyecto = () => {
       </Flex>
       {/* <ListadoTareas tareas={tareas} loading={loading} /> */}
       <Flex justifyContent="flex-end" mt="10px">
-        <AtrasButton referencia={`/proyecto/${idProyecto}`} />
+        <AtrasButton referencia={`/proyectos/${idProyecto}`} />
       </Flex>
     </>
   )
