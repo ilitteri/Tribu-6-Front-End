@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { soporteAPI } from '../axios'
 import ListadoTickets from './ListadoTickets'
+import NuevoTicketButton from './NuevoTicketButton'
 
 const VisualizacionTickets = () => {
 
@@ -33,6 +34,7 @@ const VisualizacionTickets = () => {
       return <>
         <Flex alignItems="center" justifyContent="space-between">
             <Heading>Soporte</Heading>
+            {<NuevoTicketButton/>}
         </Flex>
         {(state) ?
             <Heading as='h3' size='lg' mt='1em'>{ state.producto + " " + state.version}</Heading>
