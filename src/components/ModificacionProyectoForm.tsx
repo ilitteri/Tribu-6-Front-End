@@ -111,11 +111,11 @@ const ModificacionProyectoForm = () => {
     try {
       await proyectosAPI.patch(`/projects/${proyecto._id}`, proyecto)
       toast({
-        title: '¡Se modificó el proyecto! 🥳',
+        title: '¡Se modificó el proyecto!👌',
         status: 'success',
         isClosable: true,
       })
-      navigate('/proyectos')
+      navigate(-1)
     } catch (err) {
       toast({
         title: 'Ocurrió un error al intentar modificar el proyecto 😔',
@@ -199,7 +199,7 @@ const ModificacionProyectoForm = () => {
                       key={`${legajo}-${Nombre}-${Apellido}`}
                       value={`${Nombre} ${Apellido}`}
                       selected={selected}
-                    >{`${Nombre} ${Apellido} (${legajo})`}</option>
+                    >{`${Nombre} ${Apellido}`}</option>
                   )
                 })}
               </Select>

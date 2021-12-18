@@ -68,6 +68,15 @@ const CreacionTareaForm = () => {
     fetchRecursos()
   }, [])
 
+  const onCancel = () => {
+    toast({
+      title: 'No se guardaron los cambios',
+      status: 'info',
+      isClosable: true,
+    })
+    navigate(-1)
+  }
+
   const onSubmit = async (tarea: any) => {
     try {
       await proyectosAPI.post(`/projects/${proyectoId}/tasks`, tarea)
@@ -151,7 +160,7 @@ const CreacionTareaForm = () => {
                   <option
                     key={`${legajo}-${Nombre}-${Apellido}`}
                     value={`${Nombre} ${Apellido}`}
-                  >{`${Nombre} ${Apellido} (${legajo})`}</option>
+                  >{`${Nombre} ${Apellido}`}</option>
                 ))}
               </Select>
               <FormErrorMessage>
@@ -172,7 +181,7 @@ const CreacionTareaForm = () => {
 
           <Flex w="100%" justifyContent="end">
             <ButtonGroup spacing="6">
-              <Button onClick={() => navigate(-1)} disabled={isSubmitting}>
+              <Button onClick={onCancel} disabled={isSubmitting}>
                 Cancelar
               </Button>
               <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
