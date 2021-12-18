@@ -5,6 +5,7 @@ import Sidebar from './components/SidebarNav'
 
 import Proyectos from './pages/Proyectos'
 import Soporte from './pages/Soporte'
+import CreacionProyectos from './pages/CreacionProyectos'
 import Inicio from './pages/Inicio'
 import VisualizacionTickets from './components/VisualizacionTickets'
 
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/proyectos" element={<Proyectos />} />
+          <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
           <Route path="/soporte" element={<Soporte />}/>
           <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTickets />} />
         </Routes>
