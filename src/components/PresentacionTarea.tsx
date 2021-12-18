@@ -12,8 +12,6 @@ import {
   Box,
 } from '@chakra-ui/react'
 
-import Scroll from '../components/Scroll'
-
 interface Tarea {
   _id: number
   nombre: string

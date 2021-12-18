@@ -2,16 +2,13 @@ import {
   Spinner,
   Flex,
   Heading,
-  Container,
   Text,
-  HStack,
-  VStack,
-  Box,
   Table,
   Tbody,
   Td,
   Tr,
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 import ActionButtons from './ActionButtons'
 
 import EmptyProyectos from './EmptyProyectos'
@@ -44,6 +41,12 @@ const InfoLabels = ({ titulo, info }: any) => {
 }
 
 const PresentacionProyecto = ({ proyecto, loading }: Props) => {
+  const navigate = useNavigate()
+
+  const handleEdit = (proyectoId: any) => {
+    navigate(`/proyectos/${proyectoId}/editar`)
+  }
+
   if (loading) {
     return (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
@@ -56,16 +59,14 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
 
   return proyecto && proyecto.length !== 0 ? (
     <Flex direction="column" justifyContent="flex-start">
-      <Heading>{proyecto[0].nombre}</Heading>
-      {/* <ActionButtons
-        onDelete={() => {
-          setProyectoABorrar(proyecto[0])
-          onOpen()
-        }}
-        onEdit={() => {
-          handleEdit(proyecto[0]._id)
-        }}
-      /> */}
+      <Flex>
+        <Heading mr={5}>{proyecto[0].nombre}</Heading>
+        <ActionButtons
+          onEdit={() => {
+            handleEdit(proyecto[0]._id)
+          }}
+        />
+      </Flex>
       <Flex overflow="auto" mt="10px">
         <Table colorScheme="teal">
           <Tbody>
@@ -98,28 +99,6 @@ const PresentacionProyecto = ({ proyecto, loading }: Props) => {
           </Tbody>
         </Table>
       </Flex>
-      {/* <VStack
-        pr="50px"
-        mt="10px"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
-        <Flex w="100%" justifyContent="space-between">
-          <InfoLabels titulo="Estado:" info={proyecto[0].estado} />
-          <InfoLabels titulo="Tipo:" info={proyecto[0].tipo} />
-          <InfoLabels titulo="Líder:" info={proyecto[0].liderProyecto} />
-        </Flex>
-        <Flex w="59.6%" justifyContent="space-between">
-          <InfoLabels
-            titulo="Fecha de inicio:"
-            info={dateFromISO(proyecto[0].fechaInicio)}
-          />
-          <InfoLabels
-            titulo="Fecha de fin:"
-            info={dateFromISO(proyecto[0].fechaFin)}
-          />
-        </Flex>
-      </VStack> */}
       <Flex direction="column" mt="30px">
         <Text fontWeight="bold">Descripción: </Text>
         <Text>{proyecto[0].descripcion}</Text>
