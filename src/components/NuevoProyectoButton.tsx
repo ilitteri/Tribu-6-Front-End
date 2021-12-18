@@ -1,9 +1,17 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@chakra-ui/react'
 import { GoPlus } from 'react-icons/go'
 
 const NuevoProyectoButton = () => {
+  const navigate = useNavigate()
+
   return (
-    <Button leftIcon={<GoPlus />} colorScheme="teal" variant="solid">
+    <Button
+      onClick={() => navigate('/proyectos/nuevo')}
+      leftIcon={<GoPlus />}
+      colorScheme="teal"
+      variant="solid"
+    >
       Nuevo Proyecto
     </Button>
   )
