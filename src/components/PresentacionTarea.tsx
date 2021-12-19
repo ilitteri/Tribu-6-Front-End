@@ -22,7 +22,7 @@ interface Tarea {
 }
 
 interface Props {
-  tarea: Tarea[]
+  tarea: Tarea
   loading: boolean
 }
 
@@ -50,13 +50,13 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
     navigate(`/proyectos/${proyectoId}/${tareaId}/editar`)
   }
 
-  return tarea && tarea.length !== 0 ? (
+  return tarea ? (
     <Flex Flex direction="column" justifyContent="flex-start">
       <Flex>
-        <Heading mr={5}>{tarea[0].nombre}</Heading>
+        <Heading mr={5}>{tarea.nombre}</Heading>
         <ActionButtons
           onEdit={() => {
-            handleEdit(tarea[0].proyectoID, tarea[0]._id)
+            handleEdit(tarea.proyectoID, tarea._id)
           }}
         />
       </Flex>
@@ -65,12 +65,16 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
           <Tbody>
             <Tr>
               <Td>
-                <InfoLabels titulo="Estado:" info={tarea[0].estado} />
+                <InfoLabels titulo="Estado:" info={tarea.estado} />
               </Td>
               <Td>
                 <InfoLabels
                   titulo="Empleado responsable:"
-                  info={tarea[0].empleadosResponsables[0] || 'Sin asignar'}
+                  info={
+                    (tarea.empleadosResponsables &&
+                      tarea.empleadosResponsables[0]) ||
+                    'Sin asignar'
+                  }
                 />
               </Td>
             </Tr>
@@ -79,7 +83,7 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
       </Flex>
       <Flex direction="column" mt="30px">
         <Text fontWeight="bold">Descripción: </Text>
-        <Text>{tarea[0].descripcion || 'No hay descripción.'}</Text>
+        <Text>{tarea.descripcion || 'No hay descripción.'}</Text>
       </Flex>
     </Flex>
   ) : (
