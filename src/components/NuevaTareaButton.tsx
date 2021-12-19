@@ -9,6 +9,9 @@ const NuevaTareaButton = ({ proyectoId, ticketId }: any) => {
     ? `?${createSearchParams({
         proyectoId: proyectoId,
       })}`
+    : ticketId ? `?${createSearchParams({
+      ticketId: ticketId,
+    })}`
     : ''
 
   return (

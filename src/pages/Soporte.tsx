@@ -29,7 +29,7 @@ const Soporte = () => {
         <Heading>Soporte</Heading>
         {<NuevoTicketButton />}
       </Flex>
-      <Heading as='h3' size='lg' mt="1em">Productos</Heading>
+      <Heading as='h3' size='md' mt="0.5em">Productos</Heading>
       <Flex overflow="auto">
         <ListadoVersionesProductos productos={productos} loading={loading} />
       </Flex>
