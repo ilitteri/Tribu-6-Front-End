@@ -1,3 +1,5 @@
+import VersionProducto from "./VersionProducto";
+
 export default interface Ticket {
     titulo: string,
     descripcion: string,
@@ -6,5 +8,8 @@ export default interface Ticket {
     severidadTicket: string,
     legajoEmpleado: number,
     idCliente: number,
-    idVersionProducto: number
+    versionProducto: VersionProducto,
+    numeroTicket: number,
+    tipoTicket: string,
+    estadoTicket: string
   }

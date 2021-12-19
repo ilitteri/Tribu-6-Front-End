@@ -9,6 +9,7 @@ import {
     Td,
     Spinner
   } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 import Empleado from '../models/Empleado'
 import Ticket from '../models/Ticket'
 
@@ -31,13 +32,15 @@ const diasPorSeveridad: diasSeveridad = {
 
 const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
 
+    const navigate = useNavigate()
+
     function parseDate(fechaCreacion: Date): string {
         return new Date(fechaCreacion).toLocaleDateString("Fr");
     }
 
     function getDiasRestantes(fechaCreacion: Date, severidad: string): string {
         var diasTotales = diasPorSeveridad[severidad];
-        if(!diasTotales) return "SIN VENCIMIENTO"; // definir mensaje
+        if(!diasTotales) return "Sin vencimiento";
 
         var dia = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
         var hoy = new Date();
@@ -46,7 +49,7 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         var diasTranscurridos = Math.floor((Math.abs(creacion.getTime() - hoy.getTime())) / (dia));
         var diasParaVencimiento = diasTotales - diasTranscurridos;
 
-        return diasParaVencimiento > 0 ? diasParaVencimiento.toString() : "ATRASADA" //definir mensaje
+        return diasParaVencimiento > 0 ? diasParaVencimiento.toString() : "ATRASADA"
     }
 
     function getNombreEmpleado(idEmpleado: number ): string {
@@ -87,7 +90,12 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         <Tbody>
           {tickets.map((ticket) => {
             return (
-              <Tr>
+              <Tr
+              cursor="pointer"
+              _hover={{
+                fontWeight: 'bold'
+              }}
+              onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
                 <Td w="30%">{ticket.titulo}</Td>
                 <Td w="10%">{parseDate(ticket.fechaCreacion)}</Td>
                 <Td w="10%">{ticket.severidadTicket}</Td>

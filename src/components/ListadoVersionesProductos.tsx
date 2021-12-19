@@ -11,9 +11,11 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import Producto from '../models/Producto';
+import VersionProducto from '../models/VersionProducto';
 
 interface Props {
     productos: Producto[]
+    versiones: VersionProducto[]
     loading: boolean
 }
 
@@ -21,9 +23,18 @@ function parseDate(fechaLanzamiento: Date): string {
     return new Date(fechaLanzamiento).toLocaleDateString("Fr");
 }
 
-const ListadoVersionesProductos = ({ productos, loading }: Props) => {
+function parseProductos(productos: Producto[], versiones: VersionProducto[]): any {
+    productos.forEach(element => {
+        var versionesFiltradas = versiones.filter(version => version.producto.id === element.id)
+        element.versionesProducto = versionesFiltradas
+    });
+    return productos
+}
+
+const ListadoVersionesProductos = ({ productos, versiones, loading }: Props) => {
 
     const navigate = useNavigate()
+    const productosVersiones = parseProductos(productos, versiones)
 
     if (loading) {
         return (
@@ -33,7 +44,7 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
         )
     }
 
-    return productos && productos.length === 0 ? (
+    return productosVersiones && productosVersiones.length === 0 ? (
         <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
             <Heading as='h2' size='lg' mt="5vh">
                 No hay productos en el sistema.
@@ -41,7 +52,7 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
         </Flex>
     ) : (
         <Flex width="100%" direction="column">
-        {productos.map((producto) => {
+        {productosVersiones.map((producto: Producto) => {
             return (
             <Flex direction="column" mt="4vh">
                 <Heading as='h2' size='lg'>{producto.nombre}</Heading>
@@ -60,13 +71,13 @@ const ListadoVersionesProductos = ({ productos, loading }: Props) => {
                         </Tr>
                     </Thead>
                     <Tbody text-align="center">
-                        {producto.versionesProducto.map((version) => {
+                        {producto.versionesProducto.map( (version: VersionProducto) => {
                             return (
                             <Tr
                             _hover={{
                                 fontWeight: 'bold'
                             }}
-                            cursor="pointer" onClick={() => navigate('tickets/' + version.id, { state: {producto: producto.nombre, version: version.versionProducto} } )}>
+                            cursor="pointer" onClick={() => navigate('tickets/' + version.id )}>
                                 <Td width="50%">{version.versionProducto}</Td>
                                 <Td>{parseDate(version.fechaLanzamiento)}</Td>
                             </Tr>

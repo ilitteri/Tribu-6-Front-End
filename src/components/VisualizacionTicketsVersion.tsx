@@ -1,27 +1,35 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { soporteAPI } from '../axios'
+import Empleado from '../models/Empleado'
+import Ticket from '../models/Ticket'
+import VersionProducto from '../models/VersionProducto'
 import ListadoTickets from './ListadoTickets'
 import NuevoTicketButton from './NuevoTicketButton'
 
 const VisualizacionTickets = () => {
 
-    const [tickets, setTickets] = useState<any[]>([])
+    const [tickets, setTickets] = useState<Ticket[]>([])
+    const [version, setVersion] = useState<VersionProducto>()
     const [loading, setLoading] = useState(false)
-    const [empleados, setEmpleados] = useState<any[]>([])
+    const [empleados, setEmpleados] = useState<Empleado[]>([])
     const params = useParams();
-    const {state} = useLocation();
 
     useEffect(() => {
 
         const getData = async () => {
           setLoading(true)
           try {
+            const version = await soporteAPI.get('/versiones-productos/' + params.idVersion);
+            setVersion(version.data)
+
             const tickets = await soporteAPI.get('/tickets/producto/' + params.idVersion);
-            const empleados = await soporteAPI.get('/empleados');
             setTickets(tickets.data)
+
+            const empleados = await soporteAPI.get('/empleados');
             setEmpleados(empleados.data)
+
             setLoading(false)
           } catch {
             //handlear
@@ -34,14 +42,14 @@ const VisualizacionTickets = () => {
       return <>
         <Flex alignItems="center" justifyContent="space-between">
             <Heading>Soporte</Heading>
-            {<NuevoTicketButton/>}
+            <NuevoTicketButton version = {params.idVersion}/>
         </Flex>
-        {(state) ?
-            <Heading as='h3' size='lg' mt='1em'>{ state.producto + " " + state.version}</Heading>
-        : <></>}
-            <Flex overflow="auto">
-                <ListadoTickets tickets={tickets} empleados={empleados} loading={loading}></ListadoTickets>
-            </Flex>
+        {(version)?
+        <Heading as='h3' size='lg' mt='1em'>{ version?.producto.nombre + " " + version?.versionProducto}</Heading>
+        :<></>}
+        <Flex overflow="auto">
+          <ListadoTickets tickets={tickets} empleados={empleados} loading={loading}></ListadoTickets>
+        </Flex>
         </>
 }
 
