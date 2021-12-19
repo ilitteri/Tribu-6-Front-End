@@ -7,7 +7,7 @@ import App from './App'
 
 ReactDOM.render(
   <React.StrictMode>
-    <ColorModeScript />
+    <ColorModeScript initialColorMode="dark"/>
     <BrowserRouter>
       <App />
     </BrowserRouter>
