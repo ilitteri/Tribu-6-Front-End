@@ -63,27 +63,26 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
           }}
         />
       </Flex>
-      <InfoLabels titulo="Estado:" info={tarea[0].estado} />
-      <Flex direction="column" justifyContent="flex-end" alignItems="flex-end">
-        <InfoLabels titulo="Empleados Responsables" />
-        <Box overflowY="auto" maxHeight="150px">
-          <Table variant="striped" colorScheme="teal" w="200px">
-            <Thead position="sticky" top={0} bgColor="#ecf3f7">
-              <Tr>
-                <Th>Nombre</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {tarea[0].empleadosResponsables.map((empleado) => {
-                return (
-                  <Tr>
-                    <Td>{empleado}</Td>
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
-        </Box>
+      <Flex overflow="auto" mt="10px">
+        <Table colorScheme="teal">
+          <Tbody>
+            <Tr>
+              <Td>
+                <InfoLabels titulo="Estado:" info={tarea[0].estado} />
+              </Td>
+              <Td>
+                <InfoLabels
+                  titulo="Empleado responsable:"
+                  info={tarea[0].empleadosResponsables[0] || 'Sin asignar'}
+                />
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </Flex>
+      <Flex direction="column" mt="30px">
+        <Text fontWeight="bold">Descripción: </Text>
+        <Text>{tarea[0].descripcion || 'No hay descripción.'}</Text>
       </Flex>
     </Flex>
   ) : (
