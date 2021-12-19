@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import { proyectosAPI, recursosAPI } from '../axios'
+import { proyectosAPI, recursosAPI, soporteAPI } from '../axios'
 
 interface Proyecto {
   _id: number
@@ -45,6 +45,7 @@ const CreacionTareaForm = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, _setSearchParams] = useSearchParams()
   const proyectoId = searchParams.get('proyectoId')
+  const ticketId = searchParams.get('ticketId')
 
   const toast = useToast()
   const {
@@ -74,12 +75,26 @@ const CreacionTareaForm = () => {
 
   const onSubmit = async (tarea: any) => {
     try {
-      await proyectosAPI.post(`/projects/${proyectoId}/tasks`, tarea)
+      const proyId = proyectoId || tarea.proyecto
+      const tareaNueva = ticketId ? { ...tarea, ticketIDs: [ticketId] } : tarea
+
+      const res = await proyectosAPI.post(
+        `/projects/${proyId}/tasks`,
+        tareaNueva
+      )
       toast({
         title: '¡Se creó la tarea! 🥳',
         status: 'success',
         isClosable: true,
       })
+
+      if (ticketId) {
+        const tareaId = res.data.message
+        await soporteAPI.patch(`/tickets/${ticketId}`, {
+          tarea: tareaId,
+        })
+      }
+
       navigate(-1)
     } catch (err) {
       toast({
