@@ -196,10 +196,13 @@ const ModificacionTareaForm = () => {
                 {...register('empleadosResponsables')}
               >
                 {recursos?.map(({ Nombre, Apellido, legajo }) => {
+                  const selected =
+                    tarea?.empleadosResponsables[0] === `${Nombre} ${Apellido}`
                   return (
                     <option
                       key={`${legajo}-${Nombre}-${Apellido}`}
                       value={`${Nombre} ${Apellido}`}
+                      selected={selected}
                     >{`${Nombre} ${Apellido}`}</option>
                   )
                 })}
