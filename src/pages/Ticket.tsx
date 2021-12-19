@@ -12,6 +12,7 @@ import Ticket from '../models/Ticket'
 import InfoTicket from '../components/InfoTicket'
 import Empleado from '../models/Empleado'
 import Cliente from '../models/Cliente'
+import AtrasButton from '../components/AtrasButton'
 
 const TicketView = () => {
   const [ticket, setTicket] = useState<Ticket>()
@@ -60,6 +61,9 @@ const TicketView = () => {
         Este ticket no tiene tareas asociadas
       </Heading>
       {/* <ListadoTareas/> */}
+      <Flex justifyContent="flex-end" mt="10px">
+        <AtrasButton referencia={`/soporte/`} />
+      </Flex>
     </>
   )
 }
