@@ -30,6 +30,18 @@ const diasPorSeveridad: diasSeveridad = {
     "S4": 365
 }
 
+type estados = {
+  [key: string]: string
+}
+
+const estadosTicket: estados = {
+  "ABIERTO": "Abierto",
+  "ECLIENTE": "A la espera del cliente",
+  "EDESARROLLO": "A la espera de desarrollo",
+  "CERRADO": "Cerrado",
+  "EPROGRESO": "En progreso",
+}
+
 const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
 
     const navigate = useNavigate()
@@ -71,7 +83,7 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
     return tickets && tickets.length === 0 ? (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
       <Heading as='h3' size='md' mt="5vh">
-          No hay tickets creados para esta versión de producto.
+          No hay tickets creados
       </Heading>
   </Flex>
   ) : (
@@ -83,8 +95,8 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
             <Th>Severidad</Th>
             <Th>Persona asignada</Th>
             <Th>Días restantes</Th>
+            <Th>Estado</Th>
             <Th>Acciones</Th>
-
           </Tr>
         </Thead>
         <Tbody>
@@ -100,8 +112,9 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                 <Td w="10%">{parseDate(ticket.fechaCreacion)}</Td>
                 <Td w="10%">{ticket.severidadTicket}</Td>
                 <Td w="15%">{getNombreEmpleado(ticket.legajoEmpleado)}</Td>
-                <Td w="15%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
-                <Td w="20%">ACCIONES</Td>
+                <Td w="10%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
+                <Td w="10%">{estadosTicket[ticket.estadoTicket]}</Td>
+                <Td w="15%">ACCIONES</Td>
                 {/* definir acciones */}
               </Tr>
             )
