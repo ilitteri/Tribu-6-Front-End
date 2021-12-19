@@ -60,6 +60,10 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
           }}
         />
       </Flex>
+      <Flex direction="column" mt="30px">
+        <Text fontWeight="bold">Descripción: </Text>
+        <Text>{tarea.descripcion || 'No hay descripción.'}</Text>
+      </Flex>
       <Flex overflow="auto" mt="10px">
         <Table colorScheme="teal">
           <Tbody>
@@ -80,10 +84,6 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
             </Tr>
           </Tbody>
         </Table>
-      </Flex>
-      <Flex direction="column" mt="30px">
-        <Text fontWeight="bold">Descripción: </Text>
-        <Text>{tarea.descripcion || 'No hay descripción.'}</Text>
       </Flex>
     </Flex>
   ) : (
