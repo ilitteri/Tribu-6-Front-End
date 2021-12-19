@@ -2,13 +2,16 @@ import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { proyectosAPI } from '../axios'
+import { proyectosAPI, soporteAPI } from '../axios'
 
 import AtrasButton from '../components/AtrasButton'
+import ListadoTickets from '../components/ListadoTickets'
 import PresentacionTarea from '../components/PresentacionTarea'
 
-const Proyecto = () => {
-  const [tarea, setTarea] = useState<any[]>([])
+const Tarea = () => {
+  const [tarea, setTarea] = useState<any>([])
+  const [tickets, setTickets] = useState<any[]>([])
+  const [empleados, setEmpleados] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const { idProyecto, idTarea } = useParams()
 
@@ -18,19 +21,38 @@ const Proyecto = () => {
       const res = await proyectosAPI.get(
         `/projects/${idProyecto}/tasks?taskId=${idTarea}`
       )
-      setTarea(res.data.message)
+      setTarea(res.data.message[0])
       setLoading(false)
     }
 
-    // const getTareas = async () => {
-    //   setLoading(true)
-    //   const res = await proyectosAPI.get(`/projects/${idProyecto}/tasks`)
-    //   setTareas(res.data.message)
-    //   setLoading(false)
-    // }
     getTarea()
-    // getTareas()
   }, [idProyecto, idTarea])
+
+  useEffect(() => {
+    const getTickets = async (ticketId: any) => {
+      if (!ticketId) {
+        return []
+      }
+
+      setLoading(true)
+      const tickets = await soporteAPI.get(`/tickets/${ticketId}`)
+      setTickets([tickets.data])
+      setLoading(false)
+    }
+
+    getTickets(tarea.ticketIDs && tarea.ticketIDs[0])
+  }, [tarea.ticketIDs])
+
+  useEffect(() => {
+    const getEmpleados = async () => {
+      setLoading(true)
+      const empleados = await soporteAPI.get('/empleados')
+      setEmpleados(empleados.data)
+      setLoading(false)
+    }
+
+    getEmpleados()
+  }, [])
 
   return (
     <>
@@ -38,7 +60,11 @@ const Proyecto = () => {
       <Flex alignItems="center" justifyContent="space-between" mt="50px">
         <Heading>Tickets</Heading>
       </Flex>
-      {/* <ListadoTareas tareas={tareas} loading={loading} /> */}
+      <ListadoTickets
+        tickets={tickets}
+        empleados={empleados}
+        loading={loading}
+      />
       <Flex justifyContent="flex-end" mt="10px">
         <AtrasButton referencia={`/proyectos/${idProyecto}`} />
       </Flex>
@@ -46,4 +72,4 @@ const Proyecto = () => {
   )
 }
 
-export default Proyecto
+export default Tarea

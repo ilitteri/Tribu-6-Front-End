@@ -1,15 +1,12 @@
 import {
   Text,
   Table,
-  Thead,
   Tr,
-  Th,
   Tbody,
   Td,
   Spinner,
   Flex,
   Heading,
-  Box,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router'
 
@@ -25,7 +22,7 @@ interface Tarea {
 }
 
 interface Props {
-  tarea: Tarea[]
+  tarea: Tarea
   loading: boolean
 }
 
@@ -53,37 +50,40 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
     navigate(`/proyectos/${proyectoId}/${tareaId}/editar`)
   }
 
-  return tarea && tarea.length !== 0 ? (
+  return tarea ? (
     <Flex Flex direction="column" justifyContent="flex-start">
       <Flex>
-        <Heading mr={5}>{tarea[0].nombre}</Heading>
+        <Heading mr={5}>{tarea.nombre}</Heading>
         <ActionButtons
           onEdit={() => {
-            handleEdit(tarea[0].proyectoID, tarea[0]._id)
+            handleEdit(tarea.proyectoID, tarea._id)
           }}
         />
       </Flex>
-      <InfoLabels titulo="Estado:" info={tarea[0].estado} />
-      <Flex direction="column" justifyContent="flex-end" alignItems="flex-end">
-        <InfoLabels titulo="Empleados Responsables" />
-        <Box overflowY="auto" maxHeight="150px">
-          <Table variant="striped" colorScheme="teal" w="200px">
-            <Thead position="sticky" top={0} bgColor="#ecf3f7">
-              <Tr>
-                <Th>Nombre</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {tarea[0].empleadosResponsables.map((empleado) => {
-                return (
-                  <Tr>
-                    <Td>{empleado}</Td>
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
-        </Box>
+      <Flex direction="column" mt="30px">
+        <Text fontWeight="bold">Descripción: </Text>
+        <Text>{tarea.descripcion || 'No hay descripción.'}</Text>
+      </Flex>
+      <Flex overflow="auto" mt="10px">
+        <Table colorScheme="teal">
+          <Tbody>
+            <Tr>
+              <Td>
+                <InfoLabels titulo="Estado:" info={tarea.estado} />
+              </Td>
+              <Td>
+                <InfoLabels
+                  titulo="Empleado responsable:"
+                  info={
+                    (tarea.empleadosResponsables &&
+                      tarea.empleadosResponsables[0]) ||
+                    'Sin asignar'
+                  }
+                />
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
       </Flex>
     </Flex>
   ) : (
