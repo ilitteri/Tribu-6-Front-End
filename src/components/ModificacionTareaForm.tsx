@@ -197,6 +197,7 @@ const ModificacionTareaForm = () => {
               >
                 {recursos?.map(({ Nombre, Apellido, legajo }) => {
                   const selected =
+                    tarea?.empleadosResponsables?.length > 0 &&
                     tarea?.empleadosResponsables[0] === `${Nombre} ${Apellido}`
                   return (
                     <option
