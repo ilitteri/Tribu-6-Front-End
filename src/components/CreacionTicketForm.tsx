@@ -27,10 +27,13 @@ interface Props {
   productos: Producto[],
   empleados: Empleado[],
   clientes: Cliente[],
+  versiones: VersionProducto[]
   loading: boolean
 }
 
-  const CreacionTicketForm = ({ productos, empleados, clientes, loading }: Props) => {
+var versionesAMostrar: VersionProducto[] = [];
+
+  const CreacionTicketForm = ({ productos, empleados, clientes, versiones, loading }: Props) => {
     const navigate = useNavigate()
     const toast = useToast()
     const {
@@ -61,7 +64,10 @@ interface Props {
 
     function setProducto(index: number){
       setProductoSeleccionado(productos[index])
+      versionesAMostrar = versiones.filter(version => version.producto.id === productos[index].id)
     }
+
+    //TODO: setear version por default
 
     if (loading) {
       return (
@@ -132,9 +138,9 @@ interface Props {
                     required: 'Debe seleccionar una version',
                 })}
                 >
-                {productoSeleccionado ? productoSeleccionado.versionesProducto.map((version : VersionProducto) => {
+                {versionesAMostrar.map((version : VersionProducto) => {
                     return <option value = {version.id}>{version.versionProducto}</option>
-                  }) : ""}
+                  })}
                 </Select>
                 <FormErrorMessage>
                   {errors?.Version?.message}
@@ -148,7 +154,6 @@ interface Props {
                 isInvalid={errors?.Cliente}
               >
                 <FormLabel>Cliente</FormLabel>
-                {/* TODO: obtener los clientes de la api */}
                 <Select
                   id="Cliente"
                   placeholder="Seleccionar Cliente"
@@ -157,7 +162,6 @@ interface Props {
                 })}
                 >
                   {clientes.map((clientes) => {
-                    //return <p>productos.nombre</p>
                     return <option value = {clientes.id}>{clientes["razon social"]}</option>
                   })}
                 </Select>
@@ -199,8 +203,8 @@ interface Props {
                     required: 'Debe seleccionar un tipo de ticket',
                 })}
                 >
-                  <option value ={"CONSULTA"} >Consulta</option>
-                  <option  value = {"INCIDENCIA"}>Incidencia</option>
+                  <option value = {"CONSULTA"}>Consulta</option>
+                  <option value = {"INCIDENCIA"}>Incidencia</option>
                 </Select>
                 <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
               </FormControl>

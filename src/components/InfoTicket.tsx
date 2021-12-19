@@ -84,12 +84,11 @@ interface Props {
                 </Td>
               </Tr>
               <Tr>
-                {/* //TODO: get de producto */}
                 <Td>
-                  <InfoLabels titulo="Producto:" info={"Producto"} />
+                  <InfoLabels titulo="Producto:" info={ticket.versionProducto.producto.nombre} />
                 </Td>
                 <Td>
-                  <InfoLabels titulo="Version:" info={"1.0"} />
+                  <InfoLabels titulo="Version:" info={ticket.versionProducto.versionProducto} />
                 </Td>
               </Tr>
               <Tr>
