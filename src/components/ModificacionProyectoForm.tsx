@@ -99,11 +99,6 @@ const ModificacionProyectoForm = () => {
   }, [proyectoId, reset])
 
   const onCancel = () => {
-    toast({
-      title: 'No se guardaron los cambios',
-      status: 'info',
-      isClosable: true,
-    })
     navigate(-1)
   }
 

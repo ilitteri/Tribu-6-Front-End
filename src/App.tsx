@@ -3,15 +3,17 @@ import { ChakraProvider, theme } from '@chakra-ui/react'
 
 import Sidebar from './components/SidebarNav'
 
+import Inicio from './pages/Inicio'
 import Proyectos from './pages/Proyectos'
 import Proyecto from './pages/Proyecto'
-import Tarea from './pages/Tarea'
-import Soporte from './pages/Soporte'
 import CreacionProyectos from './pages/CreacionProyectos'
-import CreacionTareas from './pages/CreacionTareas'
-import Inicio from './pages/Inicio'
-import VisualizacionTickets from './components/VisualizacionTickets'
 import ModificacionProyectos from './pages/ModificacionProyectos'
+import Tarea from './pages/Tarea'
+import CreacionTareas from './pages/CreacionTareas'
+import ModificacionTareas from './pages/ModificacionTareas'
+
+import Soporte from './pages/Soporte'
+import VisualizacionTickets from './components/VisualizacionTickets'
 import NuevoTicket from './components/NuevoTicket'
 
 const App = () => {
@@ -29,8 +31,16 @@ const App = () => {
           <Route path="/proyectos/nuevo" element={<CreacionProyectos />} />
           <Route path="/proyectos/:idProyecto/:idTarea" element={<Tarea />} />
           <Route path="/tarea/nuevo" element={<CreacionTareas />} />
+          <Route
+            path="/proyectos/:idProyecto/:idTarea/editar"
+            element={<ModificacionTareas />}
+          />
+
           <Route path="/soporte" element={<Soporte />} />
-          <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTickets />}/>
+          <Route
+            path="/soporte/tickets/:idVersion"
+            element={<VisualizacionTickets />}
+          />
           <Route path="/soporte/nuevo" element={<NuevoTicket />} />
         </Routes>
       </Sidebar>

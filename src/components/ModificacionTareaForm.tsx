@@ -16,20 +16,9 @@ import {
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { proyectosAPI, recursosAPI } from '../axios'
-
-interface Proyecto {
-  _id: number
-  nombre: string
-  estado: string
-  descripcion: string
-  liderProyecto: string
-  tipo: string
-  fechaInicio: string
-  fechaFin: string
-}
 
 interface Recurso {
   legajo: number
@@ -37,26 +26,42 @@ interface Recurso {
   Apellido: string
 }
 
-const CreacionTareaForm = () => {
-  const [proyectos, setProyectos] = useState<Proyecto[]>([])
+const estados = [
+  {
+    value: 'No Iniciada',
+    nombre: 'No Iniciada',
+  },
+  {
+    value: 'En curso',
+    nombre: 'En curso',
+  },
+  {
+    value: 'Terminada',
+    nombre: 'Terminada',
+  },
+]
+
+const ModificacionTareaForm = () => {
   const [recursos, setRecursos] = useState<Recurso[]>([])
+  const [proyectos, setProyectos] = useState<any>([])
+  const [tarea, setTarea] = useState<any>([])
   const navigate = useNavigate()
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [searchParams, _setSearchParams] = useSearchParams()
-  const proyectoId = searchParams.get('proyectoId')
-
   const toast = useToast()
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm()
+  const { idTarea: tareaId, idProyecto: proyectoId } = useParams()
 
   useEffect(() => {
-    const fetchProyectos = async () => {
-      const res = await proyectosAPI.get('/projects')
-      setProyectos(res.data.message)
+    const fetchTarea = async (projectId: any, tareaId: any) => {
+      const res = await proyectosAPI.get(
+        `/projects/${projectId}/tasks?taskId=${tareaId}`
+      )
+      setTarea(res.data.message[0])
+      reset(res.data.message[0])
     }
 
     const fetchRecursos = async () => {
@@ -64,9 +69,16 @@ const CreacionTareaForm = () => {
       setRecursos(res.data)
     }
 
+    const fetchProyectos = async () => {
+      const res = await proyectosAPI.get(`/projects`)
+      const proy = res.data.message
+      setProyectos(proy)
+    }
+
+    fetchTarea(proyectoId, tareaId)
     fetchProyectos()
     fetchRecursos()
-  }, [])
+  }, [proyectoId, reset, tareaId])
 
   const onCancel = () => {
     navigate(-1)
@@ -74,16 +86,19 @@ const CreacionTareaForm = () => {
 
   const onSubmit = async (tarea: any) => {
     try {
-      await proyectosAPI.post(`/projects/${proyectoId}/tasks`, tarea)
+      await proyectosAPI.patch(
+        `/projects/${proyectoId}/tasks/${tarea._id}`,
+        tarea
+      )
       toast({
-        title: '¡Se creó la tarea! 🥳',
+        title: '¡Se modificó la tarea!👌',
         status: 'success',
         isClosable: true,
       })
       navigate(-1)
     } catch (err) {
       toast({
-        title: 'Ocurrió un error al intentar crear tarea 😔',
+        title: 'Ocurrió un error al intentar modificar la tarea 😔',
         status: 'error',
         isClosable: true,
       })
@@ -106,7 +121,7 @@ const CreacionTareaForm = () => {
                 id="nombre"
                 placeholder="Nombre de la tarea"
                 {...register('nombre', {
-                  required: 'No se puede crear una tarea sin nombre',
+                  required: 'No se puede quitar el nombre a una tarea',
                 })}
               />
               <FormErrorMessage>{errors?.nombre?.message}</FormErrorMessage>
@@ -115,15 +130,15 @@ const CreacionTareaForm = () => {
             <FormControl
               htmlFor="proyecto"
               isRequired
-              isInvalid={errors?.proyecto}
+              isInvalid={errors?.proyectoID}
             >
               <FormLabel>Proyecto</FormLabel>
               <Select
                 id="proyecto"
                 placeholder="Seleccionar proyecto"
-                {...register('proyecto')}
+                {...register('proyectoID')}
               >
-                {proyectos?.map((proyecto) => {
+                {proyectos?.map((proyecto: any) => {
                   const selected = proyecto._id.toString() === proyectoId
                   return (
                     <option
@@ -136,9 +151,33 @@ const CreacionTareaForm = () => {
                   )
                 })}
               </Select>
-              <FormErrorMessage>{errors?.proyecto?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors?.proyectoID?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
+
+          <FormControl htmlFor="estado" isRequired isInvalid={errors?.estado}>
+            <FormLabel>Estado</FormLabel>
+            <Select
+              id="estado"
+              placeholder="Seleccionar estado"
+              {...register('estado')}
+            >
+              {estados?.map((estado: any) => {
+                const selected = tarea?.estado === estado.nombre
+
+                return (
+                  <option
+                    key={estado.value}
+                    value={estado.value}
+                    selected={selected}
+                  >
+                    {estado.nombre}
+                  </option>
+                )
+              })}
+            </Select>
+            <FormErrorMessage>{errors?.estado?.message}</FormErrorMessage>
+          </FormControl>
 
           <HStack>
             <FormControl
@@ -151,12 +190,18 @@ const CreacionTareaForm = () => {
                 placeholder="Seleccionar empleado"
                 {...register('empleadosResponsables')}
               >
-                {recursos?.map(({ Nombre, Apellido, legajo }) => (
-                  <option
-                    key={`${legajo}-${Nombre}-${Apellido}`}
-                    value={`${Nombre} ${Apellido}`}
-                  >{`${Nombre} ${Apellido}`}</option>
-                ))}
+                {recursos?.map(({ Nombre, Apellido, legajo }) => {
+                  const selected =
+                    tarea?.empleadosResponsables?.length > 0 &&
+                    tarea?.empleadosResponsables[0] === `${Nombre} ${Apellido}`
+                  return (
+                    <option
+                      key={`${legajo}-${Nombre}-${Apellido}`}
+                      value={`${Nombre} ${Apellido}`}
+                      selected={selected}
+                    >{`${Nombre} ${Apellido}`}</option>
+                  )
+                })}
               </Select>
               <FormErrorMessage>
                 {errors?.empleadosResponsable?.message}
@@ -168,7 +213,7 @@ const CreacionTareaForm = () => {
             <FormLabel>Descripción</FormLabel>
             <Textarea
               id="descripcion"
-              placeholder="Agregá una descripción a la tarea..."
+              placeholder="Modificá la descripción a la tarea..."
               {...register('descripcion')}
             />
             <FormErrorMessage>{errors?.descripcion?.message}</FormErrorMessage>
@@ -180,7 +225,7 @@ const CreacionTareaForm = () => {
                 Cancelar
               </Button>
               <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-                Crear tarea
+                Guardar
               </Button>
             </ButtonGroup>
           </Flex>
@@ -190,4 +235,4 @@ const CreacionTareaForm = () => {
   )
 }
 
-export default CreacionTareaForm
+export default ModificacionTareaForm

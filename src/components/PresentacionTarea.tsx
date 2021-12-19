@@ -11,12 +11,16 @@ import {
   Heading,
   Box,
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router'
+
+import ActionButtons from './ActionButtons'
 
 interface Tarea {
   _id: number
   nombre: string
   estado: string
   descripcion: string
+  proyectoID: string
   empleadosResponsables: string[]
 }
 
@@ -36,6 +40,7 @@ const InfoLabels = ({ titulo, info }: any) => {
   )
 }
 const PresentacionTarea = ({ tarea, loading }: Props) => {
+  const navigate = useNavigate()
   if (loading) {
     return (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
@@ -44,9 +49,20 @@ const PresentacionTarea = ({ tarea, loading }: Props) => {
     )
   }
 
+  const handleEdit = (proyectoId: any, tareaId: any) => {
+    navigate(`/proyectos/${proyectoId}/${tareaId}/editar`)
+  }
+
   return tarea && tarea.length !== 0 ? (
     <Flex Flex direction="column" justifyContent="flex-start">
-      <Heading>{tarea[0].nombre}</Heading>
+      <Flex>
+        <Heading mr={5}>{tarea[0].nombre}</Heading>
+        <ActionButtons
+          onEdit={() => {
+            handleEdit(tarea[0].proyectoID, tarea[0]._id)
+          }}
+        />
+      </Flex>
       <InfoLabels titulo="Estado:" info={tarea[0].estado} />
       <Flex direction="column" justifyContent="flex-end" alignItems="flex-end">
         <InfoLabels titulo="Empleados Responsables" />

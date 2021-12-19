@@ -7,28 +7,65 @@ import {
   Td,
   Spinner,
   Flex,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import EmptyTareas from './EmptyTareas'
 import Scroll from '../components/Scroll'
+import ActionButtons from './ActionButtons'
+import AdvertenciaModal from './AdvertenciaModal'
+import { proyectosAPI } from '../axios'
 
 interface Tarea {
   _id: number
   nombre: string
   estado: string
+  descripcion: string
+  proyectoID: string
+  empleadosResponsables: string[]
 }
 
 interface Props {
   proyectoId: number
   tareas: Tarea[]
+  setTareas: any
   loading: boolean
 }
 
-const ListadoTareas = ({ proyectoId, tareas, loading }: Props) => {
+const ListadoTareas = ({ proyectoId, tareas, setTareas, loading }: Props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
+  const toast = useToast()
   const { id } = useParams()
+  const [tareaABorrar, setTareaABorrar] = useState<any>()
+
+  const handleEdit = (proyectoId: any, tareaId: any) => {
+    navigate(`/proyectos/${proyectoId}/${tareaId}/editar`)
+  }
+
+  const handleDelete = async (proyectoId: any, tareaId: any) => {
+    try {
+      await proyectosAPI.delete(`/projects/${proyectoId}/tasks/${tareaId}`)
+      toast({
+        title: 'Tarea borrada 👌',
+        status: 'success',
+        isClosable: true,
+      })
+      const { data } = await proyectosAPI.get(`/projects/${proyectoId}/tasks`)
+      setTareas(data.message)
+    } catch (err) {
+      toast({
+        title: 'Ocurrió un error al intentar borrar la tarea 😔',
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }
+
   if (loading) {
     return (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
@@ -74,6 +111,17 @@ const ListadoTareas = ({ proyectoId, tareas, loading }: Props) => {
                     >
                       {tarea.estado}
                     </Td>
+                    <Td w="100px">
+                      <ActionButtons
+                        onDelete={() => {
+                          setTareaABorrar(tarea)
+                          onOpen()
+                        }}
+                        onEdit={() => {
+                          handleEdit(tarea.proyectoID, tarea._id)
+                        }}
+                      />
+                    </Td>
                   </Tr>
                 )
               })}
@@ -81,6 +129,24 @@ const ListadoTareas = ({ proyectoId, tareas, loading }: Props) => {
           </Table>
         </Scroll>
       </Flex>
+
+      {tareaABorrar && (
+        <AdvertenciaModal
+          isOpen={isOpen}
+          onClose={onClose}
+          onDelete={() =>
+            handleDelete(tareaABorrar.proyectoID, tareaABorrar._id)
+          }
+          proyecto={tareaABorrar}
+          alertHeader="Borrar Tarea"
+          alertBody={
+            <>
+              ¿Estás seguro que querés borrar{' '}
+              <strong>{tareaABorrar.nombre}</strong> de forma permanente?
+            </>
+          }
+        />
+      )}
     </>
   )
 }
