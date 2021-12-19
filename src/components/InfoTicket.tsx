@@ -1,0 +1,145 @@
+import {
+    Spinner,
+    Flex,
+    Heading,
+    Text,
+    Table,
+    Tbody,
+    Td,
+    Tr,
+} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
+import Cliente from '../models/Cliente'
+import Empleado from '../models/Empleado'
+import Ticket from '../models/Ticket'
+import ActionButtons from './ActionButtons'
+
+type diasSeveridad = {
+  [key: string]: number
+}
+
+const diasPorSeveridad: diasSeveridad = {
+  "S1": 1,
+  "S2": 7,
+  "S3": 30,
+  "S4": 365
+}
+
+interface Props {
+    ticket: Ticket
+    cliente: Cliente
+    empleado: Empleado
+    loading: boolean
+}
+
+  const InfoLabels = ({ titulo, info }: any) => {
+    return (
+      <Flex>
+        <Text fontWeight="bold" mr="5px">
+          {titulo}
+        </Text>
+        <Text>{info}</Text>
+      </Flex>
+    )
+  }
+
+  const InfoTicket = ({ ticket, cliente, empleado, loading }: Props) => {
+    const navigate = useNavigate()
+
+    const handleEdit = (ticketId: any) => {
+      navigate(`/soporte/ticket/${ticketId}/editar`)
+    }
+
+    if (loading) {
+      return (
+        <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
+          <Spinner />
+        </Flex>
+      )
+    }
+
+    return ticket ? (
+      <Flex direction="column" justifyContent="flex-start">
+        <Flex>
+          <Heading mr={5}>{ticket.titulo} ( #{ticket.numeroTicket} )</Heading>
+          <ActionButtons
+            onEdit={() => {
+              handleEdit(ticket.numeroTicket)
+            }}
+          />
+        </Flex>
+        <Flex direction="column" mt="30px">
+          <Text fontWeight="bold">Descripción: </Text>
+          <Text>{ticket.descripcion}</Text>
+        </Flex>
+        <Flex overflow="auto" mt="2em">
+          <Table colorScheme="teal">
+            <Tbody>
+              <Tr>
+                <Td>
+                  <InfoLabels titulo="Estado:" info={ticket.estadoTicket} />
+                </Td>
+                <Td>
+                  <InfoLabels titulo="Tipo:" info={ticket.tipoTicket} />
+                </Td>
+              </Tr>
+              <Tr>
+                {/* //TODO: get de producto */}
+                <Td>
+                  <InfoLabels titulo="Producto:" info={"Producto"} />
+                </Td>
+                <Td>
+                  <InfoLabels titulo="Version:" info={"1.0"} />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <InfoLabels titulo="Cliente:" info={cliente['razon social']} />
+                </Td>
+                <Td>
+                  <InfoLabels titulo="Recurso asignado:" info={empleado ? `${empleado.Nombre} ${empleado.Apellido}` : "-"} />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <InfoLabels titulo="Severidad" info={ ticket.severidadTicket}/>
+                </Td>
+                <Td>
+                <InfoLabels titulo="Dias SLA restantes" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}/>
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <InfoLabels titulo="Fecha de inicio:" info={parseDate(ticket.fechaCreacion)}/>
+                </Td>
+                <Td>
+                  <InfoLabels titulo="Fecha de fin:" info={ ticket.fechaFinalizacion ? parseDate(ticket.fechaFinalizacion) : "-"}/>
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Flex>
+      </Flex>
+    ) : (
+      <Flex>
+          <Heading>Hubo un error al buscar el ticket</Heading>
+      </Flex>
+    )
+  }
+
+  function parseDate(fechaCreacion: Date): string {
+    return new Date(fechaCreacion).toLocaleDateString("Fr");
+  }
+  function getDiasRestantes(fechaCreacion: Date, severidad: string): string {
+    var diasTotales = diasPorSeveridad[severidad];
+    if(!diasTotales) return "Sin vencimiento";
+    var dia = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+    var hoy = new Date();
+    var creacion = new Date(fechaCreacion);
+
+    var diasTranscurridos = Math.floor((Math.abs(creacion.getTime() - hoy.getTime())) / (dia));
+    var diasParaVencimiento = diasTotales - diasTranscurridos;
+
+    return diasParaVencimiento > 0 ? diasParaVencimiento.toString() : "ATRASADA"
+  }
+export default InfoTicket

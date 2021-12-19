@@ -6,5 +6,8 @@ export default interface Ticket {
     severidadTicket: string,
     legajoEmpleado: number,
     idCliente: number,
-    idVersionProducto: number
+    idVersionProducto: number,
+    numeroTicket: number,
+    tipoTicket: string,
+    estadoTicket: string
   }
