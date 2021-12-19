@@ -15,7 +15,7 @@ import ModificacionTareas from './pages/ModificacionTareas'
 import Soporte from './pages/Soporte'
 import NuevoTicket from './components/NuevoTicket'
 import VisualizacionTicketsVersion from './components/VisualizacionTicketsVersion'
-import Ticket from './pages/Ticket'
+import TicketView from './pages/Ticket'
 
 const App = () => {
   return (
@@ -39,7 +39,7 @@ const App = () => {
 
           <Route path="/soporte" element={<Soporte />} />
           <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTicketsVersion />}/>
-          <Route path="/soporte/ticket/:id" element={<Ticket />}/>
+          <Route path="/soporte/ticket/:id" element={<TicketView />}/>
           <Route path="/soporte/nuevo" element={<NuevoTicket />} />
         </Routes>
       </Sidebar>
