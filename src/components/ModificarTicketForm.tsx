@@ -32,13 +32,14 @@ interface Ticket {
   severidadTicket: string,
   legajoEmpleado: number,
   idCliente: number,
-  idVersionProducto: number
-  versionProducto: string
-  tipoTicket: string
+  idVersionProducto: number,
+  versionProducto: string,
+  tipoTicket: string,
 }
 
 interface Cliente {
   'razon social': string 
+  idCliente: number
 }
 
 interface Empleado {
@@ -46,6 +47,10 @@ interface Empleado {
   Nombre: string,
   id: number,
   legajo: number
+}
+
+interface Severidad{
+  tipo: String
 }
 
 const ModificarTicketForm = () => {
@@ -62,7 +67,7 @@ const ModificarTicketForm = () => {
 
   const onSubmit = async (ticket: any) => {
     try {
-      await soporteAPI.patch('/tickets', ticket) 
+      await soporteAPI.patch('/tickets/'+ params.id, ticket) 
       toast({
         title: 'Ticket modificado',
         status: 'success',
@@ -83,7 +88,6 @@ const ModificarTicketForm = () => {
   const [ticket,setTicket] = useState<Ticket>()
   const [productos, setProductos] = useState<any[]>([])
   const [empleados, setEmpleados] = useState<any[]>([])
-  const [empleado, setEmpleado] = useState<Empleado>()
   const [clientes, setClientes] = useState<any[]>([])
   useEffect(() => {
     const getData = async () => {
@@ -93,7 +97,6 @@ const ModificarTicketForm = () => {
         const empleados = await soporteAPI.get('/empleados')
         const clientes = await soporteAPI.get('/clientes')
         const ticket = await soporteAPI.get('/tickets/'+ params.id)
-        const empleado = await soporteAPI.get('/empleados/'+ ticket.data.legajoEmpleado)
         setProductos(productos.data)
         setEmpleados(empleados.data)
         setClientes(clientes.data)
@@ -106,14 +109,6 @@ const ModificarTicketForm = () => {
     }
   getData()
   }, [params.idVersion])
-
-  function getNombreEmpleado(legajoEmpleado: number|undefined ): string {
-    var empleadoEncontrado = empleados.find(empleado => empleado.legajo === legajoEmpleado)
-    if (empleadoEncontrado){
-      return empleadoEncontrado.Nombre + " " + empleadoEncontrado.Apellido;
-    }
-    return "";
-  }
   
   return (
     
@@ -161,13 +156,13 @@ const ModificarTicketForm = () => {
             <Select
               id="Cliente"
               placeholder="Seleccionar Cliente"
-              {...register('Cliente', {
+              {...register('idCliente', {
                 required: 'Debe seleccionar un cliente',
             })}
             >
               {clientes.map((clientes) => {
                 //return <p>productos.nombre</p>
-                return <option value = {clientes.id}>{clientes["razon social"]}</option>
+                return <option value = {clientes.id} selected={clientes.id === ticket?.idCliente}>{clientes["razon social"]}</option>
               })}
             </Select>
             <FormErrorMessage>
@@ -181,14 +176,16 @@ const ModificarTicketForm = () => {
           >
             <FormLabel>Persona asignada</FormLabel>
             {/* TODO: obtener las personas de la api de recursos */}
+            
             <Select
               id="persona"
               placeholder="Seleccionar la persona asignada al ticket"
-              defaultValue = {empleados.filter(empleados =>empleados.legajo === ticket?.legajoEmpleado)}
-              {...register('persona')}
+
+            
+              {...register('legajoEmpleado')}
             >
               {empleados.map((empleados) => {       
-                return <option value = {empleados.id}>{empleados.Nombre + " " + empleados.Apellido}</option>
+                return <option value = {empleados.legajo} selected={empleados.legajo === ticket?.legajoEmpleado} >{empleados.Nombre + " " + empleados.Apellido}</option>
               })}
             </Select>
             <FormErrorMessage>
@@ -204,30 +201,35 @@ const ModificarTicketForm = () => {
             <Select
               id="tipoDeTitipocket"
               placeholder="tipo"
-              {...register('tipo', {
+              defaultValue = {ticket?.tipoTicket}
+              {...register('tipoTicket', {
                 required: 'Debe seleccionar un tipo de ticket',
             })}
             >
+             
               <option value ={"CONSULTA"} >Consulta</option>
               <option  value = {"INCIDENCIA"}>Incidencia</option>
             </Select>
+            
             <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl htmlFor="Severidad" isRequired isInvalid={errors?.tipo}>
+          <FormControl htmlFor="Severidad" isRequired isInvalid={errors?.Severidad}>
             <FormLabel>Severidad</FormLabel>
+            {console.log(ticket?.severidadTicket)}
             <Select
               id="Severidad"
               placeholder="Seleccionar severidad del ticket"
-              {...register('Severidad', {
+              defaultValue = {ticket?.severidadTicket}
+              {...register('severidadTicket', {
                 required: 'Debe seleccionar una severidad',
             })}
             >
-              {/* Habria que configurar que al ser un ticket de consulta no deje poner la severidad */}
-              <option>S1</option>
-              <option>S2</option>
-              <option>S3</option>
-              <option>S4</option>
+              <option value="SIN_SEVERIDAD">Sin severidad</option>
+              <option value = {"S1"}>S1</option>
+              <option value = {"S2"}>S2</option> 
+              <option value = {"S3"}>S3</option>
+              <option value = {"S4"}>S4</option>
             </Select>
             <FormErrorMessage>{errors?.Severidad?.message}</FormErrorMessage>
           </FormControl>
