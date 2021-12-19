@@ -135,13 +135,13 @@ const ModificacionTareaForm = () => {
             <FormControl
               htmlFor="proyecto"
               isRequired
-              isInvalid={errors?.proyecto}
+              isInvalid={errors?.proyectoID}
             >
               <FormLabel>Proyecto</FormLabel>
               <Select
                 id="proyecto"
                 placeholder="Seleccionar proyecto"
-                {...register('proyecto')}
+                {...register('proyectoID')}
               >
                 {proyectos?.map((proyecto: any) => {
                   const selected = proyecto._id.toString() === proyectoId
@@ -156,7 +156,7 @@ const ModificacionTareaForm = () => {
                   )
                 })}
               </Select>
-              <FormErrorMessage>{errors?.proyecto?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors?.proyectoID?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
 
