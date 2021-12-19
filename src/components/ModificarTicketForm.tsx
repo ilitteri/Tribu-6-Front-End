@@ -22,6 +22,7 @@ import { FaTicketAlt } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { soporteAPI } from '../axios'
+import CreacionTicketForm from './CreacionTicketForm'
 
 
 interface Ticket {
@@ -49,9 +50,39 @@ interface Empleado {
   legajo: number
 }
 
-interface Severidad{
-  tipo: String
-}
+const severidad = [
+  {
+    value: 'SIN_SEVERIDAD',
+    nombre: 'SIN SEVERIDAD',
+  },
+  {
+    value: 'S1',
+    nombre: 'S1',
+  },
+  {
+    value: 'S2',
+    nombre: 'S2',
+  },
+  {
+    value: 'S3',
+    nombre: 'S3',
+  },
+  {
+    value: 'S4',
+    nombre: 'S4',
+  },
+]
+
+const tipo = [
+  {
+    value: 'CONSULTA',
+    nombre: 'CONSULTA',
+  },
+  {
+    value: 'INCIDENCIA',
+    nombre: 'INCIDENCIA',
+  },
+]
 
 const ModificarTicketForm = () => {
   const navigate = useNavigate()
@@ -207,8 +238,19 @@ const ModificarTicketForm = () => {
             })}
             >
              
-              <option value ={"CONSULTA"} >Consulta</option>
-              <option  value = {"INCIDENCIA"}>Incidencia</option>
+              {tipo?.map((tipo: any) => {
+                const selected = ticket?.tipoTicket === tipo.nombre
+
+                return (
+                  <option
+                    key={tipo.value}
+                    value={tipo.value}
+                    selected={selected}
+                  >
+                    {tipo.nombre}
+                  </option>
+                )
+              })}
             </Select>
             
             <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
@@ -225,11 +267,19 @@ const ModificarTicketForm = () => {
                 required: 'Debe seleccionar una severidad',
             })}
             >
-              <option value="SIN_SEVERIDAD">Sin severidad</option>
-              <option value = {"S1"}>S1</option>
-              <option value = {"S2"}>S2</option> 
-              <option value = {"S3"}>S3</option>
-              <option value = {"S4"}>S4</option>
+              {severidad?.map((severidad: any) => {
+                const selected = ticket?.severidadTicket === severidad.nombre
+
+                return (
+                  <option
+                    key={severidad.value}
+                    value={severidad.value}
+                    selected={selected}
+                  >
+                    {severidad.nombre}
+                  </option>
+                )
+              })}
             </Select>
             <FormErrorMessage>{errors?.Severidad?.message}</FormErrorMessage>
           </FormControl>

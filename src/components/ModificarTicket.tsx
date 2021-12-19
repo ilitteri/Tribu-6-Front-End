@@ -36,50 +36,10 @@ interface Ticket {
 }
 
 
-/*
-const ModificarTicket = () => {
-
-let params = useParams();
-console.log(params);
-
-const [ticket, setTicket] = useState<Ticket>()
-const [loading, setLoading] = useState(false)
-
-useEffect(() => {
-
-  const getData = async () => {
-    setLoading(true)
-    try {
-      const ticket = await soporteAPI.get('/tickets/'+ params.id);
-      setTicket(ticket.data)
-      setLoading(false)
-    } catch {
-      //handlear
-      setLoading(false)
-    }
-  }
-  getData()
-}, [params.idVersion])
-  return (
-
-    <>
-      <Heading>Ticket producto version</Heading>
-      <Heading as = 'h3' size = 'md'>fecha de creacion</Heading>
-      <ModificarTicketForm />
-    </>
-  )
-}
-*/
-
-
-
-
-
 const ModificarTicket = () => {
   return (
-    <>
-      <Heading>Ticket producto version</Heading>
-      <Heading as = 'h3' size = 'md'>fecha de creacion</Heading>
+    <><Heading>Ticket producto version</Heading>
+    <Heading as = 'h3' size = 'md'>fecha de creacion</Heading>
       <ModificarTicketForm />
     </>
   )

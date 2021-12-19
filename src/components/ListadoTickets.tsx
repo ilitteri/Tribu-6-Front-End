@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Empleado from '../models/Empleado'
 import Ticket from '../models/Ticket'
-import VisualizarTicketButton from './ModificarTicketButton'
+import ActionButtons from './ActionButtons'
 
 interface Props {
   tickets: Ticket[],
@@ -44,8 +44,11 @@ const estadosTicket: estados = {
 }
 
 const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
-
     const navigate = useNavigate()
+
+    const handleEdit = (ticketId: any) => {
+      navigate(`/soporte/ticket/${ticketId}/editar`)
+    }
 
     function parseDate(fechaCreacion: Date): string {
         return new Date(fechaCreacion).toLocaleDateString("Fr");
@@ -116,7 +119,12 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                 <Td w="10%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
                 <Td w="10%">{estadosTicket[ticket.estadoTicket]}</Td>
                 <Td w="15%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
-                <Td w="20%">{<VisualizarTicketButton ticketID = {ticket.numeroTicket}/>}</Td>
+                <Td w="20%">{
+                    <ActionButtons
+                    onEdit={() => {
+                      handleEdit(ticket.numeroTicket)
+                    }} />}
+                    </Td>
               </Tr>
             )
           })}
