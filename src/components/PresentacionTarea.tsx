@@ -1,15 +1,12 @@
 import {
   Text,
   Table,
-  Thead,
   Tr,
-  Th,
   Tbody,
   Td,
   Spinner,
   Flex,
   Heading,
-  Box,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router'
 
