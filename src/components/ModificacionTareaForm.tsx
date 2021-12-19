@@ -32,12 +32,12 @@ const estados = [
     nombre: 'No Iniciada',
   },
   {
-    value: 'En desarrollo',
-    nombre: 'En desarrollo',
+    value: 'En curso',
+    nombre: 'En curso',
   },
   {
-    value: 'Terminado',
-    nombre: 'Terminado',
+    value: 'Terminada',
+    nombre: 'Terminada',
   },
 ]
 
