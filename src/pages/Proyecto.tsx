@@ -44,6 +44,7 @@ const Proyecto = () => {
       <ListadoTareas
         proyectoId={proyecto[0]?._id}
         tareas={tareas}
+        setTareas={setTareas}
         loading={loading}
       />
       <Flex justifyContent="flex-end" mt="10px">
