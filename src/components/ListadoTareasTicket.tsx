@@ -13,9 +13,8 @@ import {
   } from '@chakra-ui/react'
 
   import { useState } from 'react'
-  import { useNavigate, useParams } from 'react-router-dom'
+  import { useNavigate } from 'react-router-dom'
 
-  import EmptyTareas from './EmptyTareas'
   import Scroll from '../components/Scroll'
   import ActionButtons from './ActionButtons'
   import AdvertenciaModal from './AdvertenciaModal'
