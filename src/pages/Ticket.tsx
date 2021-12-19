@@ -2,7 +2,9 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { soporteAPI, proyectosAPI } from '../axios'
+import { soporteAPI,
+  // proyectosAPI
+} from '../axios'
 
 import NuevaTareaButton from '../components/NuevaTareaButton'
 
