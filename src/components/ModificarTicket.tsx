@@ -35,11 +35,17 @@ interface Ticket {
   idVersionProducto: number
 }
 
-
+/*
+<Heading> 
+      {ticket?.versionProducto.producto.nombre} {ticket?.versionProducto.versionProducto}
+      </Heading>
+    <Heading as = 'h3' size = 'md'>{ticket?.fechaCreacion}</Heading>
+    */
 const ModificarTicket = () => {
   return (
-    <><Heading>Ticket producto version</Heading>
-    <Heading as = 'h3' size = 'md'>fecha de creacion</Heading>
+    <><Heading> 
+      Modificacion de Ticket
+    </Heading>
       <ModificarTicketForm />
     </>
   )

@@ -14,6 +14,8 @@ import {
   useToast,
   FormErrorMessage,
   Heading,
+  Tr,
+  Td,
 } from '@chakra-ui/react'
   
 import { useEffect, useState } from 'react'
@@ -22,8 +24,8 @@ import { FaTicketAlt } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { soporteAPI } from '../axios'
+import VersionProducto from '../models/VersionProducto'
 import CreacionTicketForm from './CreacionTicketForm'
-
 
 interface Ticket {
   titulo: string,
@@ -33,10 +35,12 @@ interface Ticket {
   severidadTicket: string,
   legajoEmpleado: number,
   idCliente: number,
-  idVersionProducto: number,
-  versionProducto: string,
+  versionProducto: VersionProducto,
+  numeroTicket: number,
   tipoTicket: string,
+  estadoTicket: string
 }
+
 
 interface Cliente {
   'razon social': string 
@@ -84,7 +88,35 @@ const tipo = [
   },
 ]
 
+const estado = [
+  {
+    value: 'ABIERTO',
+    nombre: 'Abierto',
+  },
+  {
+    value: 'ECLIENTE',
+    nombre: 'A la espera del cliente',
+  },
+  {
+    value: 'EDESARROLLO',
+    nombre: 'A la espera de desarrollo',
+  },
+  {
+    value: 'CERRADO',
+    nombre: 'Cerrado',
+  },
+  {
+    value: 'EPROGRESO',
+    nombre: 'En progres0',
+  },
+]
+
+
 const ModificarTicketForm = () => {
+
+  function parseDate(fechaCreacion: Date): string {
+    return new Date(fechaCreacion).toLocaleDateString("Fr");
+}
   const navigate = useNavigate()
     const toast = useToast()
     const {
@@ -149,6 +181,11 @@ const ModificarTicketForm = () => {
     rounded="md"
     mt="20px"
     >
+   <Heading> 
+      {ticket?.versionProducto.producto.nombre} {ticket?.versionProducto.versionProducto}
+      </Heading>
+  
+    
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
         <FormControl htmlFor="titulo" isRequired isInvalid={errors?.titulo}>
@@ -179,21 +216,30 @@ const ModificarTicketForm = () => {
 
         <HStack>
           <FormControl
-            htmlFor="Cliente" isRequired
-            isInvalid={errors?.Cliente}
+            htmlFor="estado" isRequired
+            isInvalid={errors?.Estado}
           >
-            <FormLabel>Cliente</FormLabel>
+            <FormLabel>Estado</FormLabel>
             {/* TODO: obtener los clientes de la api */}
             <Select
-              id="Cliente"
-              placeholder="Seleccionar Cliente"
-              {...register('idCliente', {
-                required: 'Debe seleccionar un cliente',
-            })}
+              id="estado"
+              placeholder="Seleccionar estado"
+              {...register('estadoTicket', {
+                required: 'No se puede guardar un ticket sin estado',
+              })}
             >
-              {clientes.map((clientes) => {
-                //return <p>productos.nombre</p>
-                return <option value = {clientes.id} selected={clientes.id === ticket?.idCliente}>{clientes["razon social"]}</option>
+              {estado?.map((estado: any) => {
+                const selected = ticket?.estadoTicket === estado.value
+
+                return (
+                  <option
+                    key={estado.value}
+                    value={estado.value}
+                    selected={selected}
+                  >
+                    {estado.nombre}
+                  </option>
+                )
               })}
             </Select>
             <FormErrorMessage>

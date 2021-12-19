@@ -106,7 +106,41 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         <Tbody>
           {tickets.map((ticket) => {
             return (
-              <Tr
+              <Tr>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {ticket.titulo}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {parseDate(ticket.fechaCreacion)}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {ticket.severidadTicket}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {getNombreEmpleado(ticket.legajoEmpleado) }
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}
+                </Td>
+                <Td w="100px">
+                  <ActionButtons
+                    onEdit={() => {
+                      handleEdit(ticket.numeroTicket)
+                    }}
+                  />
+                </Td>
+              </Tr>
+            )
+          })}
+        </Tbody>
+      </Table>
+  )
+}
+
+export default ListadoTickets
+
+/*
+<Tr
               cursor="pointer"
               _hover={{
                 fontWeight: 'bold'
@@ -126,11 +160,5 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                     }} />}
                     </Td>
               </Tr>
-            )
-          })}
-        </Tbody>
-      </Table>
-  )
-}
 
-export default ListadoTickets
+              */
