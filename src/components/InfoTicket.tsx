@@ -85,7 +85,7 @@ interface Props {
           {ticket.estadoTicket !== "CERRADO" && <ActionButtons
             onEdit={() => {
               handleEdit(ticket.numeroTicket)
-            }} 
+            }}
           />
           }
 
@@ -123,10 +123,10 @@ interface Props {
               </Tr>
               <Tr>
                 <Td>
-                  <InfoLabels titulo="Severidad" info={ severidad[ticket.severidadTicket]}/>
+                  <InfoLabels titulo="Severidad:" info={ severidad[ticket.severidadTicket]}/>
                 </Td>
                 <Td>
-                <InfoLabels titulo="Dias SLA restantes" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket, ticket.estadoTicket)}/>
+                <InfoLabels titulo="Dias SLA restantes:" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket, ticket.estadoTicket)}/>
                 </Td>
               </Tr>
               <Tr>
@@ -134,7 +134,7 @@ interface Props {
                   <InfoLabels titulo="Fecha de inicio:" info={parseDate(ticket.fechaCreacion)}/>
                 </Td>
                 <Td>
-                  <InfoLabels titulo="Fecha de fin:" info={ ticket.fechaFinalizacion ? parseDate(ticket.fechaFinalizacion) : "-"}/>
+                  <InfoLabels titulo="Fecha de finalización:" info={ ticket.fechaFinalizacion ? parseDate(ticket.fechaFinalizacion) : "-"}/>
                 </Td>
               </Tr>
             </Tbody>

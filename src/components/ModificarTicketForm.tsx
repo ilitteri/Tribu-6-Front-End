@@ -321,7 +321,8 @@ const { isOpen, onOpen, onClose } = useDisclosure()
           alertHeader="Cerrar ticket"
           alertBody={
             <>
-              ¿Estás seguro que querés cerrar el ticket de forma permanente?
+              {"¿Estás seguro que querés cerrar el ticket de forma permanente?"} <br></br><br></br>
+              {"⚠️  No podrás realizar modificaciones luego de esta acción."}
             </>
           }
         />
