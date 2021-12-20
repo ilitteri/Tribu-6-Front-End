@@ -75,7 +75,7 @@ import {
     return tareas && tareas.length === 0 ? (
       <Flex p="5px" w="100%" justifyContent="center" alignItems="center">
         <Heading as='h2' size='md' mt="5vh">
-          No tareas asociadas a este ticket
+          No hay tareas asociadas a este ticket
         </Heading>
       </Flex>
     ) : (

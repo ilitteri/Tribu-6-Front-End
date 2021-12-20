@@ -1,9 +1,10 @@
 import { IconButton } from '@chakra-ui/button'
 import { Flex } from '@chakra-ui/layout'
 import { Tooltip } from '@chakra-ui/react'
-import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+import { FaTrashAlt, FaEdit, FaTimes} from 'react-icons/fa'
 
-const ActionButtons = ({ onDelete, onEdit }: any) => {
+
+const ActionButtons = ({ onDelete, onEdit, onCloseTicket }: any) => {
   return (
     <Flex justifyContent="center" alignItems="center">
       {onDelete && (
@@ -26,6 +27,16 @@ const ActionButtons = ({ onDelete, onEdit }: any) => {
           onClick={onEdit}
         />
       </Tooltip>
+      {onCloseTicket && (
+      <Tooltip hasArrow label="Cerrar">
+        <IconButton
+          aria-label="Cerrar"
+          variant="outline"
+          icon={<FaTimes />}
+          onClick={onCloseTicket}
+        />
+      </Tooltip>)}
+
     </Flex>
   )
 }

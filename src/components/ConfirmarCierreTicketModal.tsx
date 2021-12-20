@@ -45,7 +45,7 @@ import {
                 }}
                 ml={3}
               >
-                Cerrar
+                Cerrar Ticket
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

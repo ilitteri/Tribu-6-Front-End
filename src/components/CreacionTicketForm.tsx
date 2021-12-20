@@ -231,9 +231,9 @@ var versionesAMostrar: VersionProducto[] = [];
             <Flex w="100%" justifyContent="end">
               <ButtonGroup spacing="6">
                 <Button
-                  onClick={() => navigate('/soporte')}
+                  onClick={() => navigate(-1)}
                   disabled={isSubmitting}>
-                  Cancelar
+                  Cancelar 
                 </Button>
                 <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
                   Crear Ticket

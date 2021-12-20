@@ -7,12 +7,17 @@ import {
     Th,
     Tbody,
     Td,
-    Spinner
+    Spinner,
+    useDisclosure,
+    useToast
   } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { soporteAPI } from '../axios'
 import Empleado from '../models/Empleado'
 import Ticket from '../models/Ticket'
 import ActionButtons from './ActionButtons'
+import ConfirmarCierreTicketModal from './ConfirmarCierreTicketModal'
 
 interface Props {
   tickets: Ticket[],
@@ -52,7 +57,31 @@ const estadosTicket: obj = {
 }
 
 const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
+  const toast = useToast()
+  const patch = async(ticket: any) => {
+    try {
+      await soporteAPI.patch('/tickets/'+ ticket.numeroTicket, {estado: "CERRADO"})
+      toast({
+        duration : 2000,
+        onCloseComplete: () =>{
+          window.location.reload()
+        },
+        title: 'Ticket cerrado',
+        status: 'success',
+        isClosable: true,
+      })
+      
+    } catch (err) {
+      toast({
+        title: 'Ocurrió un error al intentar cerrar el ticket ',
+        status: 'error',
+        isClosable: true,
+      })
+    }
+  }
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
+    const [ticketACerrar, setTicketACerrar] = useState <Ticket>()
 
     const handleEdit = (ticketId: any) => {
       navigate(`/soporte/ticket/${ticketId}/editar`)
@@ -62,7 +91,10 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         return new Date(fechaCreacion).toLocaleDateString("Fr");
     }
 
-    function getDiasRestantes(fechaCreacion: Date, severidad: string): string {
+    function getDiasRestantes(fechaCreacion: Date, severidad: string, estadoTicket: string): string {
+        if(estadoTicket === "CERRADO"){
+          return "-"
+        }
         var diasTotales = diasPorSeveridad[severidad];
         if(!diasTotales) return "Sin vencimiento";
 
@@ -99,6 +131,7 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
       </Heading>
   </Flex>
   ) : (
+    <>
       <Table mt="2vh" variant="striped" colorScheme="teal">
         <Thead>
           <Tr>
@@ -128,23 +161,42 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                   {getNombreEmpleado(ticket.legajoEmpleado) }
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
-                  {getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}
+                  {getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket,ticket.estadoTicket)}
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
                   {estadosTicket[ticket.estadoTicket]}
                 </Td>
                 <Td w="100px">
-                  <ActionButtons
+                  {ticket.estadoTicket !== "CERRADO" &&<ActionButtons
                     onEdit={() => {
                       handleEdit(ticket.numeroTicket)
                     }}
+                    onCloseTicket={() => {
+                      setTicketACerrar(ticket)
+                      onOpen()
+                    }}
                   />
+                  }
                 </Td>
               </Tr>
             )
           })}
         </Tbody>
       </Table>
+            {ticketACerrar && (
+              <ConfirmarCierreTicketModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onConfirm={() => patch(ticketACerrar)}
+                alertHeader="Cerrar ticket"
+                alertBody={
+                  <>
+                    ¿Estás seguro que querés cerrar el ticket de forma permanente?
+                  </>
+                }
+              />
+            )}
+            </>
   )
 }
 

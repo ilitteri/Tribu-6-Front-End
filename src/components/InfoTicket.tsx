@@ -82,11 +82,13 @@ interface Props {
       <Flex direction="column" justifyContent="flex-start">
         <Flex>
           <Heading mr={5}>{ticket.titulo} ( #{ticket.numeroTicket} )</Heading>
-          <ActionButtons
+          {ticket.estadoTicket !== "CERRADO" && <ActionButtons
             onEdit={() => {
               handleEdit(ticket.numeroTicket)
-            }}
+            }} 
           />
+          }
+
         </Flex>
         <Flex direction="column" mt="30px">
           <Text fontWeight="bold">Descripción: </Text>
@@ -124,7 +126,7 @@ interface Props {
                   <InfoLabels titulo="Severidad" info={ severidad[ticket.severidadTicket]}/>
                 </Td>
                 <Td>
-                <InfoLabels titulo="Dias SLA restantes" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}/>
+                <InfoLabels titulo="Dias SLA restantes" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket, ticket.estadoTicket)}/>
                 </Td>
               </Tr>
               <Tr>
@@ -149,7 +151,10 @@ interface Props {
   function parseDate(fechaCreacion: Date): string {
     return new Date(fechaCreacion).toLocaleDateString("Fr");
   }
-  function getDiasRestantes(fechaCreacion: Date, severidad: string): string {
+  function getDiasRestantes(fechaCreacion: Date, severidad: string, estadoTicket: string): string {
+    if(estadoTicket === "CERRADO"){
+      return "-"
+    }
     var diasTotales = diasPorSeveridad[severidad];
     if(!diasTotales) return "Sin vencimiento";
     var dia = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
