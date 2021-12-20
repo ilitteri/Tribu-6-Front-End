@@ -183,7 +183,7 @@ var versionesAMostrar: VersionProducto[] = [];
                   })}
                 >
                   {empleados.map((empleados) => {
-                    return <option value = {empleados.id}>{empleados.Nombre + " " + empleados.Apellido}</option>
+                    return <option value = {empleados.legajo}>{empleados.Nombre + " " + empleados.Apellido}</option>
                   })}
                 </Select>
                 <FormErrorMessage>

@@ -125,7 +125,7 @@ const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [ticket,setTicket] = useState<Ticket>()
   const [empleados, setEmpleados] = useState<Empleado[]>([])
-  const [ticketACerrar, setTicketACerrar] = useState <any>()
+  const [ticketACerrar, setTicketACerrar] = useState <Ticket>()
 
   useEffect(() => {
     const getData = async () => {
@@ -224,7 +224,9 @@ const { isOpen, onOpen, onClose } = useDisclosure()
             <Select
               id="persona"
               placeholder="Seleccionar la persona asignada al ticket"
-              {...register('legajoEmpleado')}
+              {...register('legajoEmpleado',{
+                valueAsNumber: true
+              })}
             >
               {empleados.map((empleados) => {
                 return <option value = {empleados.legajo} selected={empleados.legajo === ticket?.legajoEmpleado} >{empleados.Nombre + " " + empleados.Apellido}</option>
