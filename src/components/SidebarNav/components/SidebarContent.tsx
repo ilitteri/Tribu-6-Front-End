@@ -4,7 +4,6 @@ import {
   Flex,
   useColorModeValue,
   BoxProps,
-  Grid,
 } from '@chakra-ui/react'
 import { GoProject } from 'react-icons/go'
 import { AiFillFire } from 'react-icons/ai'
@@ -12,7 +11,6 @@ import { IconType } from 'react-icons'
 
 import NavItem from './NavItem'
 import LogoPsa from './LogoPsa'
-import ColorModeSwitcher from '../../ColorModeSwitcher'
 
 interface LinkItemProps {
   name: string
@@ -48,9 +46,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => (
         {link.name}
       </NavItem>
     ))}
-    <Grid p={3}>
-      <ColorModeSwitcher />
-    </Grid>
   </Box>
 )
 

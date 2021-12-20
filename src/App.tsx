@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { ChakraProvider, theme } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 
 import Sidebar from './components/SidebarNav'
 
@@ -16,6 +16,8 @@ import Soporte from './pages/Soporte'
 import NuevoTicket from './components/NuevoTicket'
 import VisualizacionTicketsVersion from './components/VisualizacionTicketsVersion'
 import TicketView from './pages/Ticket'
+
+import theme from './theme'
 
 const App = () => {
   return (
@@ -38,8 +40,11 @@ const App = () => {
           />
 
           <Route path="/soporte" element={<Soporte />} />
-          <Route path="/soporte/tickets/:idVersion" element={<VisualizacionTicketsVersion />}/>
-          <Route path="/soporte/ticket/:id" element={<TicketView />}/>
+          <Route
+            path="/soporte/tickets/:idVersion"
+            element={<VisualizacionTicketsVersion />}
+          />
+          <Route path="/soporte/ticket/:id" element={<TicketView />} />
           <Route path="/soporte/nuevo" element={<NuevoTicket />} />
         </Routes>
       </Sidebar>
