@@ -24,6 +24,7 @@ import {
         leastDestructiveRef={cancelRef}
         onClose={onClose}
         isCentered
+        size="lg"
       >
         <AlertDialogOverlay>
           <AlertDialogContent>

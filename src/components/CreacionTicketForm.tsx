@@ -50,7 +50,7 @@ var versionesAMostrar: VersionProducto[] = [];
           status: 'success',
           isClosable: true,
         })
-        navigate('/soporte')
+        navigate(`/soporte/tickets/${ticket.idVersionProducto}`)
       } catch (err) {
         toast({
           title: 'Ocurrió un error al intentar crear el ticket ',
@@ -233,7 +233,7 @@ var versionesAMostrar: VersionProducto[] = [];
                 <Button
                   onClick={() => navigate(-1)}
                   disabled={isSubmitting}>
-                  Cancelar 
+                  Cancelar
                 </Button>
                 <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
                   Crear Ticket
