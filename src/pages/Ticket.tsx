@@ -59,14 +59,16 @@ const TicketView = () => {
         loading={loading} />
       <Flex alignItems="center" justifyContent="space-between" mt="50px">
         <Heading>Tareas</Heading>
+        {ticket && ticket.estadoTicket !== "CERRADO" &&
         <NuevaTareaButton ticketId={id}></NuevaTareaButton>
+        }
       </Flex>
       <ListadoTareasTicket
         tareas={tareas}
         loading={loading}
         setTareas= {setTareas} />
       <Flex justifyContent="flex-end" mt="10px">
-        <AtrasButton referencia={`/soporte/`} />
+        <AtrasButton referencia={-1} />
       </Flex>
     </>
   )
