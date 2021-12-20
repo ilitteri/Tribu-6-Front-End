@@ -138,6 +138,7 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
 }
 
 export default ListadoTickets
+<<<<<<< HEAD
 
 /*
 <Tr
@@ -162,3 +163,5 @@ export default ListadoTickets
               </Tr>
 
               */
+=======
+>>>>>>> fixes en modificar ticket form. Agregado modal de confirmar cierre

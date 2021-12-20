@@ -13,46 +13,17 @@ import {
   useColorModeValue,
   useToast,
   FormErrorMessage,
-  Heading,
-  Tr,
-  Td,
+  useDisclosure
 } from '@chakra-ui/react'
-  
+
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { FaTicketAlt } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { soporteAPI } from '../axios'
-import VersionProducto from '../models/VersionProducto'
-import CreacionTicketForm from './CreacionTicketForm'
-
-interface Ticket {
-  titulo: string,
-  descripcion: string,
-  fechaCreacion: Date,
-  fechaFinalizacion: Date,
-  severidadTicket: string,
-  legajoEmpleado: number,
-  idCliente: number,
-  versionProducto: VersionProducto,
-  numeroTicket: number,
-  tipoTicket: string,
-  estadoTicket: string
-}
-
-
-interface Cliente {
-  'razon social': string 
-  idCliente: number
-}
-
-interface Empleado {
-  Apellido: string,
-  Nombre: string,
-  id: number,
-  legajo: number
-}
+import Empleado from '../models/Empleado'
+import Ticket from '../models/Ticket'
+import ConfirmarCierreTicketModal from "./ConfirmarCierreTicketModal"
 
 const severidad = [
   {
@@ -107,36 +78,42 @@ const estado = [
   },
   {
     value: 'EPROGRESO',
-    nombre: 'En progres0',
+    nombre: 'En progreso',
   },
 ]
 
-
 const ModificarTicketForm = () => {
 
-  function parseDate(fechaCreacion: Date): string {
-    return new Date(fechaCreacion).toLocaleDateString("Fr");
-}
+const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate()
     const toast = useToast()
     const {
       handleSubmit,
       register,
       formState: { errors, isSubmitting },
+      setValue
     } = useForm()
 
   let params = useParams();
-  console.log(params);
 
   const onSubmit = async (ticket: any) => {
+    if(ticket.estado === "CERRADO"){
+      setTicketACerrar(ticket)
+      onOpen()
+    } else {
+      patch(ticket)
+    }
+  }
+
+  const patch = async(ticket: any) => {
     try {
-      await soporteAPI.patch('/tickets/'+ params.id, ticket) 
+      await soporteAPI.patch('/tickets/'+ params.id, ticket)
       toast({
         title: 'Ticket modificado',
         status: 'success',
         isClosable: true,
       })
-      navigate('/tickets')
+      navigate(`/soporte/ticket/${params.id}`)
     } catch (err) {
       toast({
         title: 'Ocurrió un error al intentar modificar el ticket ',
@@ -145,47 +122,41 @@ const ModificarTicketForm = () => {
       })
     }
   }
-  
 
-  const [loading, setLoading] = useState(false)
   const [ticket,setTicket] = useState<Ticket>()
-  const [productos, setProductos] = useState<any[]>([])
-  const [empleados, setEmpleados] = useState<any[]>([])
-  const [clientes, setClientes] = useState<any[]>([])
+  const [empleados, setEmpleados] = useState<Empleado[]>([])
+  const [ticketACerrar, setTicketACerrar] = useState <any>()
+
   useEffect(() => {
     const getData = async () => {
-      setLoading(true)
       try {
-        const productos = await soporteAPI.get('/productos')
         const empleados = await soporteAPI.get('/empleados')
-        const clientes = await soporteAPI.get('/clientes')
         const ticket = await soporteAPI.get('/tickets/'+ params.id)
-        setProductos(productos.data)
         setEmpleados(empleados.data)
-        setClientes(clientes.data)
-        setLoading(false)
         setTicket(ticket.data)
+
+        setValue('titulo', ticket.data.titulo, { shouldDirty: true })
+        setValue('descripcion', ticket.data.descripcion, { shouldDirty: true })
+        setValue('estado', ticket.data.estadoTicket, { shouldDirty: true })
+        setValue('legajoEmpleado', ticket.data.legajoEmpleado.toString(), { shouldDirty: true })
+        setValue('tipoTicket', ticket.data.tipoTicket, { shouldDirty: true })
+        setValue('severidadTicket', ticket.data.severidadTicket, { shouldDirty: true })
+
       } catch {
         //handlear
-        setLoading(false)
       }
     }
   getData()
-  }, [params.idVersion])
-  
+  }, [params.id, setValue])
+
   return (
-    
+  <>
     <Box
     bg={useColorModeValue('white', 'gray.800')}
     p="20px"
     rounded="md"
     mt="20px"
     >
-   <Heading> 
-      {ticket?.versionProducto.producto.nombre} {ticket?.versionProducto.versionProducto}
-      </Heading>
-  
-    
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={4}>
         <FormControl htmlFor="titulo" isRequired isInvalid={errors?.titulo}>
@@ -193,9 +164,9 @@ const ModificarTicketForm = () => {
           <Input
             id="titulo"
             placeholder="Agregá un titulo del Ticket"
-            defaultValue = {ticket?.titulo}
             {...register('titulo', {
                 required: 'No se puede crear un ticket sin la descripcion',
+                value: ticket?.titulo
             })}
           />
           <FormErrorMessage>{errors?.titulo?.message}</FormErrorMessage>
@@ -203,12 +174,11 @@ const ModificarTicketForm = () => {
 
         <FormControl htmlFor="descripcion" isRequired isInvalid={errors?.descripcion}>
           <FormLabel>Descripción</FormLabel>
-          <Input
+          <Textarea
             id="descripcion"
             placeholder="Agregá una descripción del Ticket"
-            defaultValue = {ticket?.descripcion}
             {...register('descripcion', {
-                required: 'No se puede crear un ticket sin la descripcion',
+                required: 'No se puede crear un ticket sin la descripcion'
             })}
           />
           <FormErrorMessage>{errors?.descripcion?.message}</FormErrorMessage>
@@ -220,11 +190,10 @@ const ModificarTicketForm = () => {
             isInvalid={errors?.Estado}
           >
             <FormLabel>Estado</FormLabel>
-            {/* TODO: obtener los clientes de la api */}
             <Select
               id="estado"
               placeholder="Seleccionar estado"
-              {...register('estadoTicket', {
+              {...register('estado', {
                 required: 'No se puede guardar un ticket sin estado',
               })}
             >
@@ -252,16 +221,12 @@ const ModificarTicketForm = () => {
             isInvalid={errors?.persona}
           >
             <FormLabel>Persona asignada</FormLabel>
-            {/* TODO: obtener las personas de la api de recursos */}
-            
             <Select
               id="persona"
               placeholder="Seleccionar la persona asignada al ticket"
-
-            
               {...register('legajoEmpleado')}
             >
-              {empleados.map((empleados) => {       
+              {empleados.map((empleados) => {
                 return <option value = {empleados.legajo} selected={empleados.legajo === ticket?.legajoEmpleado} >{empleados.Nombre + " " + empleados.Apellido}</option>
               })}
             </Select>
@@ -283,7 +248,7 @@ const ModificarTicketForm = () => {
                 required: 'Debe seleccionar un tipo de ticket',
             })}
             >
-             
+
               {tipo?.map((tipo: any) => {
                 const selected = ticket?.tipoTicket === tipo.nombre
 
@@ -298,13 +263,12 @@ const ModificarTicketForm = () => {
                 )
               })}
             </Select>
-            
+
             <FormErrorMessage>{errors?.tipo?.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl htmlFor="Severidad" isRequired isInvalid={errors?.Severidad}>
             <FormLabel>Severidad</FormLabel>
-            {console.log(ticket?.severidadTicket)}
             <Select
               id="Severidad"
               placeholder="Seleccionar severidad del ticket"
@@ -347,11 +311,21 @@ const ModificarTicketForm = () => {
       </Stack>
     </form>
   </Box>
-)
-   
+      {ticketACerrar && (
+        <ConfirmarCierreTicketModal
+          isOpen={isOpen}
+          onClose={onClose}
+          onConfirm={() => patch(ticketACerrar)}
+          alertHeader="Cerrar ticket"
+          alertBody={
+            <>
+              ¿Estás seguro que querés cerrar el ticket de forma permanente?
+            </>
+          }
+        />
+      )}
+    </>
+  )
 }
 
 export default ModificarTicketForm
-
-
-
