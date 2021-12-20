@@ -2,9 +2,7 @@
 import { Flex, Heading } from '@chakra-ui/layout'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { soporteAPI,
-  // proyectosAPI
-} from '../axios'
+import { soporteAPI, proyectosAPI } from '../axios'
 
 import NuevaTareaButton from '../components/NuevaTareaButton'
 
@@ -13,12 +11,13 @@ import InfoTicket from '../components/InfoTicket'
 import Empleado from '../models/Empleado'
 import Cliente from '../models/Cliente'
 import AtrasButton from '../components/AtrasButton'
+import ListadoTareasTicket from '../components/ListadoTareasTicket'
 
 const TicketView = () => {
   const [ticket, setTicket] = useState<Ticket>()
   const [empleado, setEmpleado] = useState<Empleado>()
   const [cliente, setCliente] = useState<Cliente>()
-  // const [tareas, setTareas] = useState<any[]>([])
+  const [tareas, setTareas] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const { id } = useParams()
 
@@ -37,10 +36,15 @@ const TicketView = () => {
         setEmpleado(empleado.data)
       }
 
-      //TODO: get tareas
-      // const tareas = await proyectosAPI.get(``)
-      // setTareas(tareas.data.message)
+      const promesasTarea : any = [];
+      ticket.data.idTareas.forEach(async (tarea: string) => {
+        promesasTarea.push( proyectosAPI.get(`/tasks?taskId=${tarea}`))
+      })
 
+      let tareas = await Promise.all(promesasTarea);
+      tareas = tareas.map( tarea => tarea.data.message[0])
+      tareas = tareas.filter(tarea => tarea !== undefined)
+      setTareas(tareas)
       setLoading(false)
     }
     getData()
@@ -57,10 +61,10 @@ const TicketView = () => {
         <Heading>Tareas</Heading>
         <NuevaTareaButton ticketId={id}></NuevaTareaButton>
       </Flex>
-      <Heading size="md" textAlign="center" mt="3em">
-        Este ticket no tiene tareas asociadas
-      </Heading>
-      {/* <ListadoTareas/> */}
+      <ListadoTareasTicket
+        tareas={tareas}
+        loading={loading}
+        setTareas= {setTareas} />
       <Flex justifyContent="flex-end" mt="10px">
         <AtrasButton referencia={`/soporte/`} />
       </Flex>

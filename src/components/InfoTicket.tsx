@@ -25,6 +25,18 @@ const diasPorSeveridad: diasSeveridad = {
   "S4": 365
 }
 
+type estados = {
+  [key: string]: string
+}
+
+const estadosTicket: estados = {
+  "ABIERTO": "Abierto",
+  "ECLIENTE": "A la espera del cliente",
+  "EDESARROLLO": "A la espera de desarrollo",
+  "CERRADO": "Cerrado",
+  "EPROGRESO": "En progreso",
+}
+
 interface Props {
     ticket: Ticket
     cliente: Cliente
@@ -77,7 +89,7 @@ interface Props {
             <Tbody>
               <Tr>
                 <Td>
-                  <InfoLabels titulo="Estado:" info={ticket.estadoTicket} />
+                  <InfoLabels titulo="Estado:" info={estadosTicket[ticket.estadoTicket]} />
                 </Td>
                 <Td>
                   <InfoLabels titulo="Tipo:" info={ticket.tipoTicket} />
