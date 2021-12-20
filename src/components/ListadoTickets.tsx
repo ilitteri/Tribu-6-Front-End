@@ -31,11 +31,19 @@ const diasPorSeveridad: diasSeveridad = {
     "S4": 365
 }
 
-type estados = {
+type obj = {
   [key: string]: string
 }
 
-const estadosTicket: estados = {
+const severidad: obj = {
+  "SIN_SEVERIDAD": "Sin severidad",
+  "S1": "S1",
+  "S2": "S2",
+  "S3": "S3",
+  "S4": "S4"
+}
+
+const estadosTicket: obj = {
   "ABIERTO": "Abierto",
   "ECLIENTE": "A la espera del cliente",
   "EDESARROLLO": "A la espera de desarrollo",
@@ -114,13 +122,16 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
                   {parseDate(ticket.fechaCreacion)}
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
-                  {ticket.severidadTicket}
+                  {severidad[ticket.severidadTicket]}
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
                   {getNombreEmpleado(ticket.legajoEmpleado) }
                 </Td>
                 <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
                   {getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {estadosTicket[ticket.estadoTicket]}
                 </Td>
                 <Td w="100px">
                   <ActionButtons
@@ -138,30 +149,3 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
 }
 
 export default ListadoTickets
-<<<<<<< HEAD
-
-/*
-<Tr
-              cursor="pointer"
-              _hover={{
-                fontWeight: 'bold'
-              }}
-              onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
-                <Td w="30%">{ticket.titulo}</Td>
-                <Td w="10%">{parseDate(ticket.fechaCreacion)}</Td>
-                <Td w="10%">{ticket.severidadTicket}</Td>
-                <Td w="15%">{getNombreEmpleado(ticket.legajoEmpleado)}</Td>
-                <Td w="10%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
-                <Td w="10%">{estadosTicket[ticket.estadoTicket]}</Td>
-                <Td w="15%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
-                <Td w="20%">{
-                    <ActionButtons
-                    onEdit={() => {
-                      handleEdit(ticket.numeroTicket)
-                    }} />}
-                    </Td>
-              </Tr>
-
-              */
-=======
->>>>>>> fixes en modificar ticket form. Agregado modal de confirmar cierre

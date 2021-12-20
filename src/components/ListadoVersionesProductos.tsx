@@ -74,9 +74,6 @@ const ListadoVersionesProductos = ({ productos, versiones, loading }: Props) => 
                         {producto.versionesProducto.map( (version: VersionProducto) => {
                             return (
                             <Tr
-                            _hover={{
-                                fontWeight: 'bold'
-                            }}
                             cursor="pointer" onClick={() => navigate('tickets/' + version.id )}>
                                 <Td width="50%">{version.versionProducto}</Td>
                                 <Td>{parseDate(version.fechaLanzamiento)}</Td>
