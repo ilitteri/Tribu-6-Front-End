@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Empleado from '../models/Empleado'
 import Ticket from '../models/Ticket'
+import ActionButtons from './ActionButtons'
 
 interface Props {
   tickets: Ticket[],
@@ -30,11 +31,19 @@ const diasPorSeveridad: diasSeveridad = {
     "S4": 365
 }
 
-type estados = {
+type obj = {
   [key: string]: string
 }
 
-const estadosTicket: estados = {
+const severidad: obj = {
+  "SIN_SEVERIDAD": "Sin severidad",
+  "S1": "S1",
+  "S2": "S2",
+  "S3": "S3",
+  "S4": "S4"
+}
+
+const estadosTicket: obj = {
   "ABIERTO": "Abierto",
   "ECLIENTE": "A la espera del cliente",
   "EDESARROLLO": "A la espera de desarrollo",
@@ -43,8 +52,11 @@ const estadosTicket: estados = {
 }
 
 const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
-
     const navigate = useNavigate()
+
+    const handleEdit = (ticketId: any) => {
+      navigate(`/soporte/ticket/${ticketId}/editar`)
+    }
 
     function parseDate(fechaCreacion: Date): string {
         return new Date(fechaCreacion).toLocaleDateString("Fr");
@@ -102,20 +114,32 @@ const ListadoTickets = ({ tickets, empleados, loading }: Props) => {
         <Tbody>
           {tickets.map((ticket) => {
             return (
-              <Tr
-              cursor="pointer"
-              _hover={{
-                fontWeight: 'bold'
-              }}
-              onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
-                <Td w="30%">{ticket.titulo}</Td>
-                <Td w="10%">{parseDate(ticket.fechaCreacion)}</Td>
-                <Td w="10%">{ticket.severidadTicket}</Td>
-                <Td w="15%">{getNombreEmpleado(ticket.legajoEmpleado)}</Td>
-                <Td w="10%">{getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}</Td>
-                <Td w="10%">{estadosTicket[ticket.estadoTicket]}</Td>
-                <Td w="15%">ACCIONES</Td>
-                {/* definir acciones */}
+              <Tr>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {ticket.titulo}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {parseDate(ticket.fechaCreacion)}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {severidad[ticket.severidadTicket]}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {getNombreEmpleado(ticket.legajoEmpleado) }
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}
+                </Td>
+                <Td cursor="pointer" onClick={() => navigate(`/soporte/ticket/${ticket.numeroTicket}`)}>
+                  {estadosTicket[ticket.estadoTicket]}
+                </Td>
+                <Td w="100px">
+                  <ActionButtons
+                    onEdit={() => {
+                      handleEdit(ticket.numeroTicket)
+                    }}
+                  />
+                </Td>
               </Tr>
             )
           })}

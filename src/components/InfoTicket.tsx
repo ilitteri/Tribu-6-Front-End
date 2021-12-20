@@ -25,11 +25,19 @@ const diasPorSeveridad: diasSeveridad = {
   "S4": 365
 }
 
-type estados = {
+type obj = {
   [key: string]: string
 }
 
-const estadosTicket: estados = {
+const severidad: obj = {
+  "SIN_SEVERIDAD": "Sin severidad",
+  "S1": "S1",
+  "S2": "S2",
+  "S3": "S3",
+  "S4": "S4"
+}
+
+const estadosTicket: obj = {
   "ABIERTO": "Abierto",
   "ECLIENTE": "A la espera del cliente",
   "EDESARROLLO": "A la espera de desarrollo",
@@ -113,7 +121,7 @@ interface Props {
               </Tr>
               <Tr>
                 <Td>
-                  <InfoLabels titulo="Severidad" info={ ticket.severidadTicket}/>
+                  <InfoLabels titulo="Severidad" info={ severidad[ticket.severidadTicket]}/>
                 </Td>
                 <Td>
                 <InfoLabels titulo="Dias SLA restantes" info={ getDiasRestantes(ticket.fechaCreacion, ticket.severidadTicket)}/>
